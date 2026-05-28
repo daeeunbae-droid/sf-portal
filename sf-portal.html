@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SF English 학습실</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+
+<!-- ===== Firebase (sf-english-voca, 싱가포르) — 학생 프로필 연동 대비 ===== -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="console.warn('fb app load fail')"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" onerror="console.warn('fb db load fail')"></script>
+
+<style>
+:root{
+  --bg:#faf7f2; --bg-2:#f3ede3; --bg-3:#ece5d8;
+  --ink:#1a1510; --ink-2:#3d3328;
+  --ink-dim:rgba(26,21,16,0.55); --ink-faint:rgba(26,21,16,0.07);
+  --gold:#a07828; --gold-light:#c9a84c; --gold-dim:rgba(160,120,40,0.12);
+  --border:rgba(26,21,16,0.10);
+  --card:#fffdf9;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Noto Sans KR',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+.wrap{max-width:560px;margin:0 auto;min-height:100%;padding:0 22px;}
+
+/* ===== 공통 ===== */
+.serif{font-family:'Noto Serif KR',serif;}
+.kicker{
+  font-family:'DM Serif Display',serif;
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);
+}
+.brand-mark{
+  font-family:'DM Serif Display',serif;
+  font-size:21px;color:var(--gold);
+}
+.brand-mark span{color:var(--ink-2);}
+
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;border:none;border-radius:13px;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;font-size:16px;font-weight:700;
+  padding:16px;transition:.18s ease;
+}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-gold:active{transform:scale(.985);background:var(--gold-light);}
+.btn-ghost{background:transparent;color:var(--ink-dim);border:1px solid var(--border);font-weight:500;font-size:14px;padding:12px;}
+.btn-ghost:active{color:var(--ink);border-color:var(--ink);}
+
+input[type=text]{
+  width:100%;padding:15px 16px;border:1px solid var(--border);
+  border-radius:13px;background:#fff;font-size:16px;
+  font-family:'Noto Sans KR',sans-serif;color:var(--ink);
+  transition:.18s;
+}
+input[type=text]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim);}
+input[type=text]::placeholder{color:rgba(26,21,16,0.32);}
+
+/* ===== 로그인 화면 ===== */
+#loginView{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:40px 0;
+}
+.login-hero{text-align:center;margin-bottom:38px;}
+.login-hero .kicker{margin-bottom:14px;}
+.login-hero h1{
+  font-family:'Noto Serif KR',serif;font-weight:700;
+  font-size:30px;line-height:1.35;color:var(--ink);margin-bottom:14px;
+}
+.login-hero h1 em{font-style:normal;color:var(--gold);}
+.login-hero p{font-size:15px;color:var(--ink-dim);line-height:1.7;}
+.login-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:26px 22px;
+}
+.login-card label{
+  display:block;font-size:13px;font-weight:700;
+  color:var(--ink-2);margin-bottom:9px;
+}
+.login-card .btn{margin-top:14px;}
+.login-foot{text-align:center;margin-top:24px;}
+
+/* ===== 접이식 시스템 안내 (학부모용) ===== */
+.system-note{
+  margin-top:16px;
+  background:rgba(255,255,255,.55);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:4px 16px;
+}
+.system-note summary{
+  list-style:none;cursor:pointer;
+  font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;
+  color:var(--ink);padding:14px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.system-note summary::-webkit-details-marker{display:none;}
+.system-note summary::after{content:'+';color:var(--gold);font-size:20px;font-weight:400;}
+.system-note[open] summary::after{content:'–';}
+.system-note-grid{display:flex;flex-direction:column;gap:9px;padding:0 0 14px;}
+.system-note-grid div{
+  padding:11px 12px;border-radius:12px;
+  background:#fffdf9;border:1px solid var(--ink-faint);
+}
+.system-note-grid b{display:block;font-size:13px;color:var(--gold);margin-bottom:3px;}
+.system-note-grid span{display:block;font-size:13px;color:var(--ink-dim);line-height:1.55;}
+.admin-link{
+  background:none;border:none;color:var(--ink-dim);font-size:13px;
+  cursor:pointer;font-family:inherit;padding:8px;
+}
+.admin-link:active{color:var(--gold);}
+
+/* ===== 대시보드 ===== */
+#dashView{display:none;padding:0 0 50px;}
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 0 10px;
+}
+.logout-link{
+  background:none;border:none;color:var(--ink-dim);font-size:13px;
+  cursor:pointer;font-family:inherit;text-decoration:underline;
+  text-underline-offset:3px;
+}
+.logout-link:active{color:var(--gold);}
+
+.greet{padding:14px 0 26px;}
+.greet .hi{font-size:14px;color:var(--ink-dim);margin-bottom:6px;}
+.greet h2{
+  font-family:'Noto Serif KR',serif;font-weight:700;
+  font-size:26px;line-height:1.4;color:var(--ink);
+}
+.greet h2 em{font-style:normal;color:var(--gold);}
+.greet-desc{margin-top:12px;font-size:14px;color:var(--ink-dim);line-height:1.7;}
+
+/* ===== SF Learning Flow (밝은 크림+골드 톤) ===== */
+.flow-card{
+  background:linear-gradient(155deg,#fffdf9 0%,#f6efe2 100%);
+  border:1px solid var(--gold-dim);
+  border-radius:20px;padding:20px 18px;margin:0 0 24px;
+}
+.flow-title{
+  font-family:'DM Serif Display',serif;color:var(--gold);
+  font-size:18px;margin-bottom:8px;
+}
+.flow-copy{font-size:14px;color:var(--ink-2);line-height:1.65;margin-bottom:14px;}
+.flow-steps{
+  display:flex;align-items:center;justify-content:space-between;gap:5px;
+  font-size:12px;font-weight:700;
+}
+.flow-steps span{
+  background:var(--gold-dim);border:1px solid rgba(160,120,40,.2);
+  color:var(--gold);border-radius:999px;padding:6px 9px;white-space:nowrap;
+}
+.flow-steps i{font-style:normal;color:var(--gold);opacity:.6;}
+
+.section-label{
+  font-size:12px;font-weight:700;letter-spacing:.05em;
+  color:var(--ink-dim);margin:6px 0 12px;
+}
+
+/* 학습 카드 */
+.tool-card{
+  display:block;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:20px;margin-bottom:13px;
+  position:relative;transition:.18s ease;cursor:pointer;
+}
+.tool-card:active{transform:scale(.99);border-color:var(--gold);}
+.tool-card.locked{opacity:.6;cursor:default;}
+.tool-card.locked:active{transform:none;border-color:var(--border);}
+.tc-head{display:flex;align-items:center;gap:13px;margin-bottom:10px;}
+.tc-icon{
+  width:46px;height:46px;border-radius:13px;flex-shrink:0;
+  background:var(--gold-dim);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;font-size:22px;
+}
+.tc-icon i{font-size:24px;}
+.tc-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:18px;color:var(--ink);}
+.tc-step{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.04em;margin-top:2px;}
+.tc-desc{font-size:14px;color:var(--ink-dim);line-height:1.65;}
+.tc-arrow{position:absolute;right:20px;top:24px;color:var(--gold);font-size:20px;}
+.tc-badge{
+  position:absolute;right:18px;top:20px;
+  font-size:11px;font-weight:700;color:var(--ink-dim);
+  background:var(--bg-3);padding:4px 10px;border-radius:20px;
+}
+
+/* 오답 추적 요약 */
+.track-card{
+  background:linear-gradient(155deg,#fffdf9 0%,#f6efe2 100%);
+  border:1px solid var(--border);border-radius:18px;
+  padding:20px;margin-top:6px;
+}
+.track-card .tc-title{margin-bottom:12px;}
+.track-row{display:flex;gap:10px;}
+.track-stat{
+  flex:1;background:rgba(255,255,255,.6);border:1px solid var(--border);
+  border-radius:12px;padding:13px;text-align:center;
+}
+.track-num{font-family:'DM Serif Display',serif;font-size:24px;color:var(--gold);line-height:1;}
+.track-lbl{font-size:11px;color:var(--ink-dim);margin-top:6px;}
+.track-note{font-size:12px;color:var(--ink-dim);margin-top:13px;text-align:center;line-height:1.6;}
+
+.foot-tag{
+  text-align:center;margin-top:34px;
+  font-size:11px;color:rgba(26,21,16,0.3);letter-spacing:.04em;
+}
+.foot-tag .brand-mark{font-size:14px;}
+
+/* ===== 툴 실행 화면 (iframe) ===== */
+#toolView{
+  display:none;
+  position:fixed;inset:0;z-index:100;
+  background:var(--bg);
+  flex-direction:column;
+}
+.tool-bar{
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 18px;
+  background:var(--bg);border-bottom:1px solid var(--border);
+}
+.tool-back{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:none;cursor:pointer;font-family:inherit;
+  font-size:14px;font-weight:700;color:var(--ink-2);padding:6px 4px;
+}
+.tool-back i{font-size:18px;color:var(--gold);}
+.tool-back:active{color:var(--gold);}
+.tool-bar .brand-mark{font-size:17px;}
+#toolFrame{
+  display:block;width:100%;flex:1;min-height:0;
+  border:0;background:#fff;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ 로그인 ============ -->
+  <div id="loginView">
+    <div class="login-hero">
+      <div class="kicker">SF English Learning System</div>
+      <h1>문장을 보는 힘,<br><em>기록으로</em> 완성합니다</h1>
+      <p>Skeleton &amp; Flesh 문장구조 수업과<br>오답 추적 테스트를 연결한 학습 공간이에요.</p>
+    </div>
+    <div class="login-card">
+      <label for="nameInput">이름을 입력하세요</label>
+      <input type="text" id="nameInput" placeholder="예) 홍길동" autocomplete="off" maxlength="12" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btn btn-gold" onclick="doLogin()">학습실 입장하기 →</button>
+    </div>
+
+    <!-- 접이식 시스템 안내 (학부모용 — 학생은 펼치지 않아도 됨) -->
+    <details class="system-note">
+      <summary>SF English는 이렇게 가르칩니다</summary>
+      <div class="system-note-grid">
+        <div><b>01 구조 이해</b><span>문장을 Skeleton(뼈대)과 Flesh(살)로 나누어 읽는 훈련을 합니다.</span></div>
+        <div><b>02 테스트 기록</b><span>단어·구문 테스트 결과를 남겨, 무엇을 다시 봐야 할지 추적합니다.</span></div>
+        <div><b>03 오답 재학습</b><span>자주 틀리는 항목만 다시 모아 완성하는 방식으로 관리합니다.</span></div>
+      </div>
+    </details>
+
+    <div class="login-foot">
+      <button class="admin-link" onclick="alert('관리자 화면은 다음 단계에서 연결됩니다.')">🔐 선생님(관리자)</button>
+    </div>
+  </div>
+
+  <!-- ============ 대시보드 ============ -->
+  <div id="dashView">
+    <div class="top-bar">
+      <span class="brand-mark">SF<span> English</span></span>
+      <button class="logout-link" onclick="doLogout()">로그아웃</button>
+    </div>
+
+    <div class="greet">
+      <div class="hi">오늘의 학습 루틴</div>
+      <h2><em id="studentName">학생</em>님,<br>틀린 지점까지 다시 확인해요</h2>
+      <p class="greet-desc">수업에서 배운 구조를 테스트로 확인하고, 오답 기록을 바탕으로 다시 학습해요.</p>
+    </div>
+
+    <!-- SF Learning Flow (밝은 톤) -->
+    <div class="flow-card">
+      <div class="flow-title">SF Learning Flow</div>
+      <div class="flow-copy">문장구조를 이해하고, 테스트로 확인하고, 오답을 다시 학습해요.</div>
+      <div class="flow-steps">
+        <span>수업</span><i>→</i><span>테스트</span><i>→</i><span>오답 추적</span><i>→</i><span>재학습</span>
+      </div>
+    </div>
+
+    <div class="section-label">오늘의 학습</div>
+
+    <!-- SF Voca -->
+    <a class="tool-card" onclick="openTool('voca')">
+      <span class="tc-arrow">→</span>
+      <div class="tc-head">
+        <div class="tc-icon"><i class="ti ti-vocabulary"></i></div>
+        <div>
+          <div class="tc-step">STEP 1 · 어휘 오답 추적</div>
+          <div class="tc-title">SF Voca</div>
+        </div>
+      </div>
+      <div class="tc-desc">단어를 외우고 끝내지 않아요. 자주 틀리는 어휘를 모아 다시 공부하고 테스트해요.</div>
+    </a>
+
+    <!-- SF Structure (= Structure Lab 본체, 현재 내신 구문 훈련 가동) -->
+    <a class="tool-card" onclick="openTool('structure')">
+      <span class="tc-arrow">→</span>
+      <div class="tc-head">
+        <div class="tc-icon"><i class="ti ti-stack-2"></i></div>
+        <div>
+          <div class="tc-step">STEP 2 · 문장구조 훈련</div>
+          <div class="tc-title">SF Structure</div>
+        </div>
+      </div>
+      <div class="tc-desc">문장을 단어 뜻으로만 풀지 않고 Skeleton과 Flesh로 나누어 구조를 복원해요. 지금은 내신 구문 훈련을 진행해요.</div>
+    </a>
+
+    <div class="section-label" style="margin-top:26px;">나의 기록</div>
+
+    <!-- 완전학습 기록 -->
+    <div class="track-card">
+      <div class="tc-title">완전학습 기록</div>
+      <div class="track-row">
+        <div class="track-stat">
+          <div class="track-num" id="statTotal">—</div>
+          <div class="track-lbl">누적 학습</div>
+        </div>
+        <div class="track-stat">
+          <div class="track-num" id="statWrong">—</div>
+          <div class="track-lbl">오답 기록</div>
+        </div>
+        <div class="track-stat">
+          <div class="track-num" id="statRetry">—</div>
+          <div class="track-lbl">재학습 대상</div>
+        </div>
+      </div>
+      <div class="track-note">맞힌 문제보다 다시 틀릴 수 있는 문제를 더 중요하게 봐요.<br>오답은 모아두었다가 다시 풀어요.</div>
+    </div>
+
+    <div class="foot-tag">
+      <span class="brand-mark">SF<span> English</span></span><br>
+      문장이 보이는 영어<br>
+      <span style="opacity:.7">Skeleton &amp; Flesh Learning System</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ 툴 실행 화면 (iframe) ============ -->
+<div id="toolView">
+  <div class="tool-bar">
+    <button class="tool-back" onclick="closeTool()"><i class="ti ti-arrow-left"></i> 학습실로 돌아가기</button>
+    <span class="brand-mark">SF<span> English</span></span>
+  </div>
+  <iframe id="toolFrame" title="SF 학습 툴"></iframe>
+</div>
+
+<script>
+/* ============================================================
+   SF English 학습 포털 — 프로토타입 (껍데기 / 허브)
+   - 로그인 → 대시보드 → 두 툴 진입
+   - Firebase 학생 프로필 연동 '자리'는 만들어 둠 (다음 단계에서 채움)
+   ============================================================ */
+
+// ── Firebase 초기화 (학생 프로필·오답 조회 대비) ──
+const FC = {
+  apiKey:"AIzaSyA8vsxLDWXbLMEqmGSMyMnsWwttH_z_mrA",
+  authDomain:"sf-english-voca.firebaseapp.com",
+  databaseURL:"https://sf-english-voca-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"sf-english-voca",
+  storageBucket:"sf-english-voca.firebasestorage.app",
+  messagingSenderId:"152710937707",
+  appId:"1:152710937707:web:f72cf0212cd6bd6a58c52e"
+};
+let DB = null;
+try{
+  if(typeof firebase !== 'undefined'){ firebase.initializeApp(FC); DB = firebase.database(); }
+  else console.warn('Firebase SDK 미로드 — 프로필/오답 조회 없이 동작');
+}catch(e){ console.warn('fb init fail', e); }
+
+// ── 상태 ──
+const S = { name:'', profile:null };
+
+// ── 두 툴의 실제 위치 (배포 후 이 URL만 바꾸면 됨) ──
+// 같은 사이트에 함께 올릴 경우 상대경로로, 별도 배포면 절대 URL로.
+const TOOL_URL = {
+  voca:      'SF_Word_Test_15_1.html',       // 예: /voca  또는  https://sf-voca.netlify.app
+  structure: 'SF-Structure-Trainer.html'     // 예: /structure 또는 배포 URL
+};
+
+// ── 로그인 ──
+function doLogin(){
+  const el = document.getElementById('nameInput');
+  const nm = (el ? el.value : '').trim();
+  if(!nm){ if(el) el.focus(); return; }
+  S.name = nm;
+
+  // 학생 이름을 다음 툴이 이어받도록 저장 (Voca/Structure는 이름 기반 로그인)
+  try{ sessionStorage.setItem('sf_student', nm); }catch(e){}
+
+  document.getElementById('studentName').textContent = nm;
+  showDash();
+  loadProfileAndStats(nm);  // 프로필·오답 요약 (있으면 표시)
+}
+
+function doLogout(){
+  S.name=''; S.profile=null;
+  try{ sessionStorage.removeItem('sf_student'); }catch(e){}
+  const f=document.getElementById('toolFrame'); if(f) f.src='about:blank';
+  document.getElementById('toolView').style.display='none';
+  document.getElementById('nameInput').value='';
+  document.getElementById('loginView').style.display='flex';
+  document.getElementById('dashView').style.display='none';
+  window.scrollTo(0,0);
+}
+
+function showDash(){
+  document.getElementById('loginView').style.display='none';
+  document.getElementById('dashView').style.display='block';
+  window.scrollTo(0,0);
+}
+
+// ── 툴 열기 (포털 안 iframe으로 실행 — 페이지 이동 없음) ──
+// 학생 이름을 쿼리로 전달 → 툴의 자동 로그인 IIFE가 받아서 바로 학습화면.
+// embedded=1 → 툴이 "iframe 모드"임을 인지해, 닫기 시 부모에 신호를 보냄.
+function openTool(key){
+  const base = TOOL_URL[key];
+  if(!base){ return; }
+  const url = base + (base.includes('?')?'&':'?')
+    + 'student=' + encodeURIComponent(S.name)
+    + '&embedded=1';
+  document.getElementById('dashView').style.display = 'none';
+  document.getElementById('toolView').style.display = 'flex';
+  document.getElementById('toolFrame').src = url;
+  window.scrollTo(0,0);
+}
+
+// ── 툴 닫기 (대시보드 복귀 + 오답 요약 새로고침) ──
+function closeTool(){
+  const f = document.getElementById('toolFrame');
+  if(f) f.src = 'about:blank';        // iframe 정리(메모리·상태 비움)
+  document.getElementById('toolView').style.display = 'none';
+  document.getElementById('dashView').style.display = 'block';
+  if(S.name) loadProfileAndStats(S.name);  // 방금 푼 결과를 카드에 반영
+  window.scrollTo(0,0);
+}
+
+// ── 툴(iframe)에서 "닫아줘" 신호 수신 ──
+window.addEventListener('message', function(e){
+  if(e && e.data && e.data.type === 'SF_CLOSE_TOOL'){ closeTool(); }
+});
+
+// ── 학생 프로필 + 오답 요약 불러오기 ──
+// 프로토타입: 데이터가 없으면 조용히 '—' 유지. 있으면 실제 수치 표시.
+function loadProfileAndStats(name){
+  if(!DB){ return; }
+  const key = name.replace(/[.#$/[\]]/g,'_');
+
+  // (1) 학생 프로필 — students/{이름}  (class, vocaRange, structureRange)
+  try{
+    DB.ref('students/'+key).once('value').then(snap=>{
+      if(snap.exists()) S.profile = snap.val();
+    }).catch(()=>{});
+  }catch(e){}
+
+  // (2) 오답 요약 — Voca의 results/{이름} 누적 집계
+  try{
+    DB.ref('results/'+key).once('value').then(snap=>{
+      if(!snap.exists()) return;
+      let total=0, wrong=0, retry=0;
+      snap.forEach(c=>{
+        const r=c.val()||{};
+        const t=(r.c||0)+(r.w||0);   // 맞음 + 틀림
+        total += t;
+        wrong += (r.w||0);
+        if((r.w||0)>0) retry++;       // 틀린 게 있는 시험 = 재시험 후보
+      });
+      if(total>0) document.getElementById('statTotal').textContent = total;
+      if(wrong>=0) document.getElementById('statWrong').textContent = wrong;
+      if(retry>=0) document.getElementById('statRetry').textContent = retry;
+    }).catch(()=>{});
+  }catch(e){}
+}
+
+// ── 새로고침 시 로그인 유지 ──
+(function(){
+  try{
+    const saved = sessionStorage.getItem('sf_student');
+    if(saved){
+      S.name = saved;
+      document.getElementById('nameInput').value = saved;
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
