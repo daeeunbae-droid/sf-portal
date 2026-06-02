@@ -239,6 +239,15 @@ const RL={"21년 3월 모의 22-23번": {"22번": [["care about", "~에 관심�
     "39번": [["survival","생존"],["adapt","적응하다"],["ancient","고대의"],["gap","간극, 격차"],["wilderness","황야, 미지의 땅"],["inhabitant","주민"],["gear","장비"],["crucial","중요한, 결정적인"],["arise","발생하다"],["a series of","일련의"]],
     "40번": [["stranger","모르는 사람, 낯선 사람"],["participant","참가자"],["empathy","공감"],["presence","존재, 있음"],["connection","관계, 연결"],["unchecked","확인하지 않은"],["weaken","약화시키다"],["involved in","~에 참여하는"]]
   },
+  "Lesson 2 (교과서 본문)": {
+    "본문 어휘": [["organic","유기농의"],["local","지역의, 현지의"],["enough","충분한"],["stare","응시하다, 빤히 보다"],["empty","텅 빈"],["field","들판, 밭"],["suddenly","갑자기"],["greenhouse","온실"],["immediately","즉시"],["solution","해결책"],["crowdfunding","크라우드펀딩(다수 소액 모금)"],["raise","(돈을) 모으다, 모금하다"],["charity","자선 단체"],["advantageous","유리한"],["attract","끌어들이다, 유치하다"],["investor","투자자"],["direct","직접적인"],["reward","보상"],["contribution","기여, 기부"],["thrilled","아주 기뻐하는, 신난"],["moreover","게다가"],["figure out","생각해 내다, 알아내다"],["detail","세부 사항"],["production","생산"],["potential","잠재적인"],["schedule","일정"],["complete","완료하다, 끝내다"],["fulfill","이행하다, 충족시키다"],["necessary","필요한"],["cost","비용"],["approximately","대략, 약"],["harvest","수확"],["promote","홍보하다, 촉진하다"],["request","요청"],["progress","진행, 진척"],["eager","간절히 바라는, 열망하는"],["impression","인상"],["achieve","성취하다, 달성하다"],["highlight","강조하다"],["ingredient","재료, 성분"],["edit","편집하다"],["commit to","~에 전념하다, ~을 약속하다"]]
+  },
+  "Nexus Ch.1 (The Nature of Information)": {
+    "본문 어휘": [["primary","주요한, 제1의"],["represent","나타내다, 묘사하다"],["ideology","이데올로기, 관념"],["unite","결속시키다, 통합하다"],["prove","입증하다"],["maintain","유지하다"],["complex","복잡한"],["cooperate","협력하다"],["function","기능하다, 작용하다"],["structure","구조"],["civilization","문명"],["mirror","반영하다"]]
+  },
+  "Nexus Ch.2 (The Rise of Non-Human Intelligence)": {
+    "본문 어휘": [["passive","수동적인"],["fundamentally","본질적으로"],["independent","독립적인"],["agent","행위자, 주체"],["intervention","개입, 중재"],["shift","이동하다, 옮기다"],["intelligence","지능"],["logic","논리, 이치"],["operate","작동하다"],["manage","관리하다"],["risk","위험"],["audience","청중, 수용자"]]
+  },
   "Nexus (2026 1학기 기말)": {
     "본문 어휘": [["nexus","연결, 결합"],["connection","연결, 관계"],["across time","시간에 걸쳐"],["society","사회"],["stay connected","연결을 유지하다"],["storytelling","이야기하기"],["belief","신념, 믿음"],["value","가치(관)"],["completely","완전히"],["powerful","강력한"],["religion","종교"],["nation","국가"],["exist","존재하다"],["agree","동의/합의하다"],["organize","정리/조직하다"],["knowledge","지식"],["pass down","전수하다"],["printing","인쇄(술)"],["spread","퍼뜨리다"],["increase","증가시키다"],["control","통제하다"],["play a key role","중요한 역할을 하다"],["instantly","즉시"],["global","세계적인"],["network","관계망"],["dangerous","위험한"],["false","거짓의"],["correct","옳은"],["influence","영향을 미치다"],["thought","생각, 사고"],["government","정부"],["shape","형성하다"],["opinion","여론, 의견"],["lead to","~을 초래하다"],["bias","편견"],["misunderstanding","오해"],["conflict","갈등"],["rational","이성적인"],["fit","맞다, 부합하다"],["existing","기존의"],["strengthen","강화하다"],["division","분열"],["be built on","~에 기반하다"],["advanced","첨단의"],["technology","기술"],["remind","상기시키다"],["carefully","신중하게"],["receive","받다"],["individual","개인"]]
   }
@@ -300,6 +309,7 @@ function rd1Label(){
 function readGroupOf(name){
   if(/^21년 3월/.test(name)) return '21년 3월 모의';
   if(/^26년 3월/.test(name)) return '26년 3월 모의';
+  if(/^Lesson/.test(name))   return '교과서';
   if(/^Nexus/.test(name))    return 'Nexus';
   return null; // 그 외(예: '22-23 고1 대의')는 숨김
 }
