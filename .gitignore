@@ -1,0 +1,11 @@
+# SFP 거버넌스 / 비공개 소스 파일 (사업 전략·관리자 비번 포함 — 공개 금지)
+SFP_결정로그_v0_1.md
+SFP_인계파일_v0_1.md
+SFP_작업추적대장_v0_1.md
+SFP-002_세션시작프롬프트.md
+phase3_data.json
+new_passages.json
+작업지시서.md
+
+# 앱 소스 백업 파일
+*.bak
