@@ -320,9 +320,9 @@ input[type=text]::placeholder{color:rgba(26,21,16,0.32);}
     <!-- SF Learning Flow (밝은 톤) -->
     <div class="flow-card">
       <div class="flow-title">SF Learning Flow</div>
-      <div class="flow-copy">문장구조를 이해하고, 테스트로 확인하고, 오답을 다시 학습해요.</div>
+      <div class="flow-copy">어휘를 다지고, 문장을 뼈와 살로 나누고, 서술형으로 완성해요.</div>
       <div class="flow-steps">
-        <span>수업</span><i>→</i><span>테스트</span><i>→</i><span>오답 추적</span><i>→</i><span>재학습</span>
+        <span>어휘</span><i>→</i><span>문장</span><i>→</i><span>서술형</span><i>→</i><span>오답복습</span>
       </div>
     </div>
 
@@ -334,24 +334,37 @@ input[type=text]::placeholder{color:rgba(26,21,16,0.32);}
       <div class="tc-head">
         <div class="tc-icon"><i class="ti ti-vocabulary"></i></div>
         <div>
-          <div class="tc-step">STEP 1 · 어휘 오답 추적</div>
+          <div class="tc-step">STEP 1 · 어휘</div>
           <div class="tc-title">SF Voca</div>
         </div>
       </div>
       <div class="tc-desc">단어를 외우고 끝내지 않아요. 자주 틀리는 어휘를 모아 다시 공부하고 테스트해요.</div>
     </a>
 
-    <!-- SF Structure (= Structure Lab 본체, 현재 내신 구문 훈련 가동) -->
+    <!-- SF 문장훈련 (준비 중, 잠금) -->
+    <div class="tool-card locked">
+      <span class="tc-badge">준비 중</span>
+      <div class="tc-head">
+        <div class="tc-icon"><i class="ti ti-binary-tree"></i></div>
+        <div>
+          <div class="tc-step">STEP 2 · 기본기</div>
+          <div class="tc-title">SF 문장훈련</div>
+        </div>
+      </div>
+      <div class="tc-desc">문장을 뼈대(Skeleton)와 살(Flesh)로 나눠 읽는 기본기를 훈련해요. 곧 열려요.</div>
+    </div>
+
+    <!-- SF 서술형훈련 (= Structure Lab 본체, 현재 내신 구문 훈련 가동) -->
     <a class="tool-card" onclick="openTool('structure')">
       <span class="tc-arrow">→</span>
       <div class="tc-head">
-        <div class="tc-icon"><i class="ti ti-stack-2"></i></div>
+        <div class="tc-icon"><i class="ti ti-pencil"></i></div>
         <div>
-          <div class="tc-step">STEP 2 · 문장구조 훈련</div>
-          <div class="tc-title">SF Structure</div>
+          <div class="tc-step">STEP 3 · 실전</div>
+          <div class="tc-title">SF 서술형훈련</div>
         </div>
       </div>
-      <div class="tc-desc">문장을 단어 뜻으로만 풀지 않고 Skeleton과 Flesh로 나누어 구조를 복원해요. 지금은 내신 구문 훈련을 진행해요.</div>
+      <div class="tc-desc">배운 구조 그대로 문장을 다시 조립해 내신 서술형을 직접 풀어요. 지금은 내신 구문 훈련을 진행해요.</div>
     </a>
 
     <div class="section-label" style="margin-top:26px;">나의 기록</div>
@@ -415,10 +428,10 @@ input[type=text]::placeholder{color:rgba(26,21,16,0.32);}
     <a class="tool-card" onclick="openAdminTool('structure')">
       <span class="tc-arrow">→</span>
       <div class="tc-head">
-        <div class="tc-icon"><i class="ti ti-stack-2"></i></div>
+        <div class="tc-icon"><i class="ti ti-pencil"></i></div>
         <div>
-          <div class="tc-step">문장구조 학습 관리</div>
-          <div class="tc-title">Structure 관리</div>
+          <div class="tc-step">서술형 학습 관리</div>
+          <div class="tc-title">서술형훈련 관리</div>
         </div>
       </div>
       <div class="tc-desc">학생별 구문 훈련 기록을 확인해요. (Structure 앱에 관리자 화면이 준비되면 바로 연결돼요.)</div>
