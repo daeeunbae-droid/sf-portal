@@ -2,9 +2,11 @@
 # _docs/   : SFP 거버넌스 문서 (인계파일·결정로그·작업추적대장·세션프롬프트)
 # _data/   : 소스 데이터 (phase3_data.json, new_passages.json, 작업지시서.md)
 # _backup/ : 앱 소스 백업
+# _proto/  : 시제품(다음 세션 통합 참조용, 라이브 비연결)
 _docs/
 _data/
 _backup/
+_proto/
 
 # 앱 소스 백업 파일 (위치 무관)
 *.bak
