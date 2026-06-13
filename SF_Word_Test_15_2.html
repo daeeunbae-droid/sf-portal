@@ -1365,9 +1365,10 @@ function checkAdminPw(){
       sessionStorage.setItem('sf_student',nm);
       S.st=nm; S.ps1=[]; S.ps2=[]; S.rd1=[]; S.rdGroup='';
       // [③-fix] 포털/세션 자동진입도 dl()과 동일하게 문장형 모듈로 진입 (#SFP-004-1 일관)
+      // sfvsBoot 등 ②-b 함수는 이 IIFE 뒤에 정의됨 → setTimeout(0)으로 로드 완료 후 실행(TDZ 회피)
       document.getElementById('app').style.display='none';
       document.getElementById('sfvs').style.display='block';
-      sfvsBoot();
+      setTimeout(function(){ try{ sfvsBoot(); }catch(e){ console.warn('sfvsBoot defer fail', e); } }, 0);
       return;
     }
   }catch(e){}
