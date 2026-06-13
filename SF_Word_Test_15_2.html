@@ -1418,20 +1418,94 @@ function renderSentenceBlank(sentence, surface, suffix){
   return `${escapeHtml(sentence.slice(0,idx))}<span class="vs-blank"></span>${sufHtml}${escapeHtml(sentence.slice(idx+surface.length))}`;
 }
 
-// ---- 저장 계층 (window.storage 없으면 메모리 폴백) ----
+// ---- 저장 계층 [③ Firebase 3노드] ----
+// voca_sentence/{progress|wrong|results}/{학생키}/{testKey}
+// 기존 voca_progress/results와 분리 병존. DB 없거나 실패 시 메모리 폴백(jsdom/오프라인 대비).
 const memStore = {};
-const hasStorage = (typeof window!=='undefined' && window.storage && typeof window.storage.get==='function');
-async function storeSet(k,v){ if(hasStorage){try{await window.storage.set(k,v);return;}catch(e){}} memStore[k]=v; }
-async function storeGet(k){ if(hasStorage){try{const r=await window.storage.get(k);return r?r.value:null;}catch(e){}} return (k in memStore)?memStore[k]:null; }
-async function storeDel(k){ if(hasStorage){try{await window.storage.delete(k);return;}catch(e){}} delete memStore[k]; }
+const hasFB = ()=> (typeof DB!=='undefined' && DB && typeof DB.ref==='function');
+// 학생키: 포털 연동명 S.st → sKey 정규화. 없으면 sessionStorage 폴백.
+function vsSK(){
+  let n = (typeof S!=='undefined' && S && S.st) ? S.st : '';
+  if(!n){ try{ n=(sessionStorage.getItem('sf_student')||''); }catch(e){} }
+  n = (n||'').trim() || 'anon';
+  return (typeof sKey==='function') ? sKey(n) : n.replace(/[.#$\/\[\]]/g,'_');
+}
+function vsPath(node){ return 'voca_sentence/'+node+'/'+vsSK()+'/'+DATA.testKey; }
+// memStore 폴백 키: 노드+학생+testKey 로 동일 구조 모사
+function memKey(node){ return 'vs/'+node+'/'+vsSK()+'/'+DATA.testKey; }
 
-async function saveSession(s){ await storeSet(SESS_KEY(), JSON.stringify(s)); }
-async function loadSession(){ const v=await storeGet(SESS_KEY()); return v?JSON.parse(v):null; }
-async function clearSession(){ await storeDel(SESS_KEY()); }
-async function setDone(b){ await storeSet(DONE_KEY(), b?"1":"0"); }
-async function getDone(){ return (await storeGet(DONE_KEY()))==="1"; }
-async function addHistory(indices){ const cur=await loadHistory(); const merged=Array.from(new Set([...cur, ...indices])); await storeSet(HIST_KEY(), JSON.stringify(merged)); }
-async function loadHistory(){ const v=await storeGet(HIST_KEY()); return v?JSON.parse(v):[]; }
+// --- progress 노드 (확인하기 진행 + done 통합) ---
+async function saveSession(s){
+  const payload = Object.assign({}, s, { done:false, updatedAt: Date.now() });
+  if(hasFB()){ try{ await DB.ref(vsPath('progress')).set(payload); return; }catch(e){} }
+  memStore[memKey('progress')] = JSON.stringify(payload);
+}
+async function loadSession(){
+  let v=null;
+  if(hasFB()){ try{ const snap=await DB.ref(vsPath('progress')).once('value'); v=snap.val(); }catch(e){} }
+  if(v===null){ const m=memStore[memKey('progress')]; v=m?JSON.parse(m):null; }
+  if(!v) return null;
+  if(v.done) return null;           // 완료된 진행은 이어하기 대상 아님
+  // queue 빈 배열 복원 방어 (Firebase가 빈 배열을 누락시킬 수 있음)
+  if(!Array.isArray(v.queue)) v.queue=[];
+  if(!Array.isArray(v.wrongThisRound)) v.wrongThisRound=[];
+  if(!v.myAns || typeof v.myAns!=='object') v.myAns={};
+  return v;
+}
+async function clearSession(){
+  if(hasFB()){ try{ await DB.ref(vsPath('progress')).remove(); return; }catch(e){} }
+  delete memStore[memKey('progress')];
+}
+// done 플래그: progress 노드의 done 필드로 통합 관리
+async function setDone(b){
+  if(hasFB()){
+    try{
+      if(b){ await DB.ref(vsPath('progress')).update({ done:true, updatedAt:Date.now() }); }
+      else { await DB.ref(vsPath('progress')+'/done').set(false); }
+      return;
+    }catch(e){}
+  }
+  const m=memStore[memKey('progress')];
+  const o = m?JSON.parse(m):{};
+  o.done = !!b; memStore[memKey('progress')]=JSON.stringify(o);
+}
+async function getDone(){
+  if(hasFB()){ try{ const snap=await DB.ref(vsPath('progress')+'/done').once('value'); return snap.val()===true; }catch(e){} }
+  const m=memStore[memKey('progress')];
+  return m ? (JSON.parse(m).done===true) : false;
+}
+
+// --- wrong 노드 (오답 이력 풀: {단어인덱스:{count,lastWrong}}) ---
+async function addHistory(indices){
+  const now=Date.now();
+  if(hasFB()){
+    try{
+      const ref=DB.ref(vsPath('wrong'));
+      const snap=await ref.once('value'); const cur=snap.val()||{};
+      const upd={};
+      indices.forEach(wi=>{ const prev=cur[wi]; upd[wi]={ count:(prev&&prev.count?prev.count:0)+1, lastWrong:now }; });
+      await ref.update(upd);
+      return;
+    }catch(e){}
+  }
+  const k=memKey('wrong'); const cur=memStore[k]?JSON.parse(memStore[k]):{};
+  indices.forEach(wi=>{ const prev=cur[wi]; cur[wi]={ count:(prev&&prev.count?prev.count:0)+1, lastWrong:now }; });
+  memStore[k]=JSON.stringify(cur);
+}
+async function loadHistory(){
+  let obj=null;
+  if(hasFB()){ try{ const snap=await DB.ref(vsPath('wrong')).once('value'); obj=snap.val(); }catch(e){} }
+  if(obj===null){ const m=memStore[memKey('wrong')]; obj=m?JSON.parse(m):{}; }
+  if(!obj) return [];
+  return Object.keys(obj).map(Number).filter(n=>!isNaN(n));
+}
+
+// --- results 노드 (완료 기록: 관리자 대시보드용) ---
+async function saveResult(rec){
+  const payload = Object.assign({ completedAt: Date.now() }, rec);
+  if(hasFB()){ try{ await DB.ref(vsPath('results')).set(payload); return; }catch(e){} }
+  memStore[memKey('results')] = JSON.stringify(payload);
+}
 
 // ---- 상태 ----
 // 확인하기 세션 구조: { roundNo, queue(이번 라운드 남은 wi 배열), wrongThisRound(이번 라운드 틀린 wi), myAns:{wi:답} }
@@ -1593,8 +1667,15 @@ async function submitTest(answer, wi){
 
 async function endRound(){
   const wrong=sess.wrongThisRound.slice();
+  // 1라운드 오답 수(난이도 지표) 캡처 — 최초 1회만
+  if(sess.roundNo===1 && sess.firstTryWrong===undefined){ sess.firstTryWrong=wrong.length; }
   if(wrong.length===0){
-    // 100% 완료
+    // 100% 완료 → results 노드 기록 후 progress 정리
+    await saveResult({
+      rounds: sess.roundNo,
+      totalWords: DATA.words.length,
+      firstTryWrong: (sess.firstTryWrong!==undefined ? sess.firstTryWrong : 0)
+    });
     await setDone(true); await clearSession();
     renderTestComplete();
   } else {
