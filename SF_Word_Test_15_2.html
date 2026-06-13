@@ -63,12 +63,189 @@ select{width:100%;padding:11px 12px;font-size:14px;border:2px solid #ddd;border-
 .sl:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
 .sw input:checked+.sl{background:#1B3A5C}
 .sw input:checked+.sl:before{transform:translateX(20px)}
+
+/* ===== [②-b] SF Voca 문장형 CSS (vs- 격리) ===== */
+  :root{
+    --cream:#faf7f2; --cream-2:#f3ede2; --ink:#2b2620; --ink-soft:#6b6256;
+    --gold:#a07828; --gold-soft:#c9a861; --line:#e3d9c6;
+    --right:#3f7d4e; --right-bg:#eaf3ec; --wrong:#b5462f; --wrong-bg:#f7eae6;
+    --review:#6a5aa0; --review-bg:#efecf6; --card:#fffdf9;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0; padding:0}
+  body{background:var(--cream); color:var(--ink); font-family:"Noto Sans KR",system-ui,sans-serif; line-height:1.6; padding:18px 16px 48px; max-width:640px; margin:0 auto}
+  .vs-eyebrow{font-size:.74rem; letter-spacing:.12em; color:var(--gold); font-weight:700; text-transform:uppercase}
+  h1{font-family:"Noto Serif KR",serif; font-weight:700; font-size:1.32rem; margin:.25rem 0 .1rem}
+  .vs-sub{color:var(--ink-soft); font-size:.86rem; margin-bottom:18px}
+
+  .vs-modes{display:grid; gap:11px; margin-bottom:8px}
+  .vs-mode-card{background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:16px 16px; cursor:pointer; transition:border-color .15s, transform .08s; text-align:left}
+  .vs-mode-card:hover{border-color:var(--gold-soft)}
+  .vs-mode-card:active{transform:scale(.995)}
+  .vs-mode-card.vs-active{border-color:var(--gold); background:#fffaf0}
+  .vs-mode-card.vs-disabled{opacity:.5; cursor:default}
+  .vs-mode-card.vs-disabled:hover{border-color:var(--line)}
+  .vs-mc-head{font-family:"Noto Serif KR",serif; font-weight:700; font-size:1.02rem; margin-bottom:3px; display:flex; align-items:center; gap:8px}
+  .vs-mc-desc{font-size:.78rem; color:var(--ink-soft); line-height:1.5}
+  .vs-tag{font-size:.64rem; font-weight:700; letter-spacing:.04em; padding:2px 8px; border-radius:999px; white-space:nowrap}
+  .vs-tag-learn{background:var(--right-bg); color:var(--right)}
+  .vs-tag-test{background:var(--wrong-bg); color:var(--wrong)}
+  .vs-tag-review{background:var(--review-bg); color:var(--review)}
+  .vs-tag-done{background:var(--right); color:#fff}
+  .vs-badge{font-size:.7rem; margin-top:6px}
+  .vs-badge.vs-resume{color:var(--wrong); font-weight:600}
+  .vs-badge.vs-count{color:var(--review); font-weight:600}
+  .vs-badge.vs-done{color:var(--right); font-weight:700}
+
+  .vs-startbar{margin-top:14px; display:flex; justify-content:flex-end}
+  .vs-meta{display:flex; gap:10px; align-items:center; font-size:.8rem; color:var(--ink-soft); margin:18px 0 14px; flex-wrap:wrap}
+  .vs-pill{background:var(--cream-2); border:1px solid var(--line); border-radius:999px; padding:3px 11px; font-weight:500}
+  .vs-mode-pill{font-weight:700}
+  .vs-mode-pill.vs-learn{color:var(--right)} .vs-mode-pill.vs-test{color:var(--wrong)} .vs-mode-pill.vs-review{color:var(--review)}
+  .vs-round-pill{color:var(--gold); font-weight:700}
+  .vs-spacer{flex:1}
+  .vs-exit{background:none; border:1px solid var(--line); color:var(--ink-soft); border-radius:999px; padding:4px 13px; font-size:.78rem; font-family:inherit; cursor:pointer; font-weight:500}
+  .vs-exit:hover{border-color:var(--gold-soft); color:var(--gold)}
+  .vs-progress-track{height:6px; background:var(--cream-2); border-radius:999px; overflow:hidden; margin-bottom:22px}
+  .vs-progress-fill{height:100%; background:linear-gradient(90deg,var(--gold-soft),var(--gold)); width:0; transition:width .35s ease}
+
+  .vs-card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 20px; box-shadow:0 1px 0 rgba(160,120,40,.04), 0 8px 28px -22px rgba(43,38,32,.5)}
+  .vs-qlabel{font-size:.78rem; color:var(--ink-soft); margin-bottom:12px}
+  .vs-qlabel b{color:var(--gold); font-weight:700}
+  .vs-sentence{font-family:"Noto Serif KR",serif; font-size:1.12rem; line-height:1.85; color:var(--ink); margin:4px 0 6px; letter-spacing:-.005em}
+  .vs-target{font-weight:700; color:var(--gold); border-bottom:2.5px solid var(--gold-soft); padding-bottom:1px; background:linear-gradient(transparent 60%, rgba(201,168,97,.22) 60%)}
+  .vs-blank{display:inline-block; min-width:58px; border-bottom:2.5px solid var(--gold); vertical-align:bottom}
+  .vs-blank-suf{color:var(--ink); font-weight:700; font-family:"Noto Serif KR",serif}
+  .vs-ask{font-size:.9rem; color:var(--ink-soft); margin:16px 0 14px}
+  .vs-ask .vs-lemma{font-family:"Noto Serif KR",serif; color:var(--gold); font-weight:700; font-size:1.02rem}
+  .vs-ask .vs-surf{color:var(--ink-soft)}
+
+  .vs-opts{display:grid; gap:10px}
+  .vs-opt{text-align:left; width:100%; background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:14px 16px; font-size:1rem; font-family:inherit; color:var(--ink); cursor:pointer; transition:border-color .15s, background .15s, transform .08s; display:flex; align-items:center; gap:12px}
+  .vs-opt:hover{border-color:var(--gold-soft)}
+  .vs-opt:active{transform:scale(.99)}
+  .vs-opt .vs-key{flex:0 0 auto; width:24px; height:24px; border-radius:7px; background:var(--cream-2); color:var(--ink-soft); font-weight:700; font-size:.82rem; display:flex; align-items:center; justify-content:center}
+  .vs-opt.vs-correct{border-color:var(--right); background:var(--right-bg)} .vs-opt.vs-correct .vs-key{background:var(--right); color:#fff}
+  .vs-opt.vs-incorrect{border-color:var(--wrong); background:var(--wrong-bg)} .vs-opt.vs-incorrect .vs-key{background:var(--wrong); color:#fff}
+  .vs-opt.vs-dim{opacity:.5}
+  .vs-opt:disabled{cursor:default}
+
+  .vs-meaning-box{background:var(--cream-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; text-align:center; margin:6px 0 16px}
+  .vs-meaning-box .vs-lbl{font-size:.72rem; color:var(--ink-soft); letter-spacing:.04em; margin-bottom:4px}
+  .vs-meaning-box .vs-mn{font-family:"Noto Serif KR",serif; font-size:1.2rem; font-weight:700; color:var(--ink)}
+  .vs-typewrap{display:flex; gap:9px; align-items:center}
+  .vs-typein{flex:1; font-family:"Noto Serif KR",serif; font-size:1.1rem; padding:13px 15px; border:1.5px solid var(--line); border-radius:12px; background:#fff; color:var(--ink); outline:none; transition:border-color .15s}
+  .vs-typein:focus{border-color:var(--gold-soft)}
+  .vs-typein.vs-ok{border-color:var(--right); background:var(--right-bg)}
+  .vs-typein.vs-no{border-color:var(--wrong); background:var(--wrong-bg)}
+  .vs-suffix-hint{font-family:"Noto Serif KR",serif; color:var(--ink-soft); font-size:1.05rem; font-weight:500; padding-right:2px}
+
+  .vs-feedback{margin-top:16px; font-size:.9rem; min-height:1.2em}
+  .vs-feedback.vs-right{color:var(--right); font-weight:600}
+  .vs-feedback.vs-wrong{color:var(--wrong); font-weight:600}
+  .vs-feedback .vs-word{font-family:"Noto Serif KR",serif}
+  .vs-next{margin-top:18px; display:flex; justify-content:flex-end; gap:10px}
+
+  .vs-btn{background:var(--gold); color:#fff; border:none; border-radius:11px; padding:11px 22px; font-size:.95rem; font-weight:700; font-family:inherit; cursor:pointer; transition:background .15s, transform .08s}
+  .vs-btn:hover{background:#8c6720}
+  .vs-btn:active{transform:scale(.98)}
+  .vs-btn:disabled{opacity:.45; cursor:default}
+  .vs-btn.vs-ghost{background:transparent; color:var(--gold); border:1.5px solid var(--line)}
+  .vs-btn.vs-ghost:hover{border-color:var(--gold-soft); background:var(--cream-2)}
+
+  .vs-result{text-align:center; padding:8px 4px}
+  .vs-score{font-family:"Noto Serif KR",serif; font-size:2.6rem; font-weight:700; color:var(--gold); line-height:1.1}
+  .vs-score small{font-size:1.1rem; color:var(--ink-soft); font-weight:500}
+  .vs-result h2{font-family:"Noto Serif KR",serif; font-size:1.2rem; margin:.4rem 0 .2rem}
+  .vs-clear-banner{background:var(--right-bg); border:1px solid #cfe6d4; color:var(--right); border-radius:12px; padding:16px; font-weight:600; margin:6px 0}
+  .vs-clear-banner .vs-big{font-family:"Noto Serif KR",serif; font-size:1.1rem; display:block; margin-bottom:2px}
+  .vs-round-banner{background:#fff6e6; border:1px solid var(--gold-soft); color:#8c6720; border-radius:12px; padding:14px 16px; margin:6px 0; font-size:.9rem}
+  .vs-round-banner b{font-family:"Noto Serif KR",serif}
+  .vs-wronglist{text-align:left; margin:22px 0 8px; border-top:1px solid var(--line); padding-top:16px}
+  .vs-wronglist h3{font-size:.82rem; color:var(--ink-soft); letter-spacing:.04em; margin:0 0 12px; font-weight:700}
+  .vs-wrow{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-bottom:1px dashed var(--line); gap:14px}
+  .vs-wrow .vs-w{font-family:"Noto Serif KR",serif; font-weight:600; color:var(--right)}
+  .vs-wrow .vs-m{color:var(--ink-soft); font-size:.9rem; text-align:right}
+  .vs-wrow .vs-cmp{font-size:.82rem; text-align:right; line-height:1.4}
+  .vs-wrow .vs-cmp .vs-mine{color:var(--wrong); text-decoration:line-through}
+  .vs-wrow .vs-cmp .vs-mine.vs-blank-ans{font-style:italic; text-decoration:none; opacity:.7}
+  .vs-wrow .vs-cmp .vs-ans{color:var(--right); font-family:"Noto Serif KR",serif; font-weight:600}
+  .vs-wrow .vs-cmp .vs-mn2{color:var(--ink-soft); display:block; margin-top:1px}
+  .vs-empty-good{color:var(--right); font-weight:600; padding:8px 0}
+  .vs-actions{display:flex; gap:10px; justify-content:center; margin-top:22px; flex-wrap:wrap}
+
+  .vs-note{margin-top:26px; font-size:.76rem; color:var(--ink-soft); background:var(--cream-2); border:1px solid var(--line); border-radius:10px; padding:12px 14px; line-height:1.55}
+  .vs-note b{color:var(--gold)}
+
+  /* ②-a 추가 — 불규칙 안내 */
+  .vs-irregular-note{background:#fff6e6; border:1px solid var(--gold-soft); color:#8c6720; border-radius:10px; padding:9px 13px; font-size:.82rem; margin:0 0 12px; line-height:1.5}
+  .vs-irregular-note b{color:#7a5a18}
+  /* ②-a 추가 — 지문 선택 화면 */
+  .vs-pick-head{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+  .vs-pick-mode{font-weight:700; color:var(--gold)}
+  .vs-pick-title{font-family:"Noto Serif KR",serif; font-size:1.15rem; font-weight:700; margin-bottom:14px; color:var(--ink)}
+  .vs-pick-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px}
+  .vs-pick-btn{background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:14px 12px; font-family:inherit; font-size:.95rem; font-weight:700; color:var(--ink); cursor:pointer; display:flex; flex-direction:column; gap:4px; align-items:flex-start; transition:border-color .15s, transform .08s}
+  .vs-pick-btn:hover{border-color:var(--gold-soft); background:#fffaf0}
+  .vs-pick-btn:active{transform:scale(.98)}
+  .vs-pick-n{font-size:.72rem; font-weight:500; color:var(--ink-soft)}
+
+/* ===== [②-b] end ===== */
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="console.warn('fb app load fail')"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" onerror="console.warn('fb db load fail')"></script>
 </head>
 <body>
 <div class="ctn" id="app"></div>
+<div id="sfvs" style="display:none">
+  <div class="vs-eyebrow">STEP 1 · 어휘</div>
+  <h1>문장으로 만나는 단어</h1>
+  <div class="vs-sub">시험 지문 속 문장에서 단어를 익히고, 테스트로 확인해요.</div>
+
+  <div id="home">
+    <div class="vs-modes">
+      <div class="vs-mode-card" data-mode="learn">
+        <div class="vs-mc-head"><span class="vs-tag vs-tag-learn">학습</span> 익히기</div>
+        <div class="vs-mc-desc">밑줄 친 단어의 뜻을 4지선다로 고르고, 바로 정답을 확인해요. 맥락 속에서 단어를 익히는 단계.</div>
+      </div>
+      <div class="vs-mode-card" data-mode="test">
+        <div class="vs-mc-head"><span class="vs-tag vs-tag-test">확인</span> 확인하기 <span id="doneTag"></span></div>
+        <div class="vs-mc-desc">빈칸에 단어를 직접 타이핑해요. <b>틀린 단어가 0이 될 때까지</b> 반복해 모두 맞히면 학습 완료예요.</div>
+        <div class="vs-badge vs-resume" id="resumeBadge" style="display:none"></div>
+        <div class="vs-badge vs-done" id="doneBadge" style="display:none"></div>
+      </div>
+      <div class="vs-mode-card" data-mode="review">
+        <div class="vs-mc-head"><span class="vs-tag vs-tag-review">복습</span> 오답 다시 풀기</div>
+        <div class="vs-mc-desc">확인하기에서 <b>한 번이라도 틀렸던 단어</b>를 모아 다시 풀어요. 완료한 뒤에도 복습할 수 있어요.</div>
+        <div class="vs-badge vs-count" id="reviewBadge"></div>
+      </div>
+    </div>
+    <div class="vs-startbar"><button class="vs-btn" id="start" disabled>시작하기</button></div>
+  </div>
+
+  <div id="picker" style="display:none"></div>
+
+  <div id="run" style="display:none">
+    <div class="vs-meta">
+      <span class="vs-pill">26년 3월 모의 · 22번</span>
+      <span class="vs-pill vs-mode-pill" id="modePill"></span>
+      <span class="vs-pill vs-round-pill" id="roundPill" style="display:none"></span>
+      <span id="counter">1 / 20</span>
+      <span class="vs-spacer"></span>
+      <button class="vs-exit" id="exitBtn">나가기</button>
+    </div>
+    <div class="vs-progress-track"><div class="vs-progress-fill" id="pfill"></div></div>
+    <div id="stage"></div>
+  </div>
+
+  <div class="vs-note">
+    <b>시제품 안내</b> — <b>확인하기</b>는 틀린 단어가 0이 될 때까지 라운드를 반복하는 완결 학습이에요. 중간에 나가도 다시 들어오면 이어서 풀어 100%를 채울 수 있어요.
+    <b>오답 다시 풀기</b>는 확인하기와 별개로, 여태 틀렸던 단어를 언제든 복습하는 공간입니다.
+  </div>
+
+
+</div>
+
 <script>
 // ─── FIREBASE 초기화 ─────────────────────────────────────────────────────────
 const firebaseConfig = {
@@ -380,7 +557,13 @@ function rLogin(a){
   </div></div></div>`;
   document.getElementById('ni').addEventListener('keydown',e=>{if(e.key==='Enter')dl()});
 }
-function dl(){const n=document.getElementById('ni').value.trim();if(!n)return;S.st=n;S.sc='select';S.ps1=[];S.ps2=[];S.rd1=[];S.rdGroup='';R()}
+function dl(){const n=document.getElementById('ni').value.trim();if(!n)return;S.st=n;
+  // [②-b] 로그인 후 → 기존 단어테스트(select) 대신 문장형 모듈로 진입 (#SFP-004-1 대체)
+  sessionStorage.setItem('sf_student', n);
+  document.getElementById('app').style.display='none';
+  document.getElementById('sfvs').style.display='block';
+  sfvsBoot();
+}
 
 function leaveVoca(){
   let fromPortal=false;
@@ -1185,6 +1368,399 @@ function checkAdminPw(){
   }catch(e){}
 })();
 R();
+
+// ===== [②-b] SF Voca 문장형 모듈 JS =====
+function vsTestLabel(key){
+  // "263_20" → "26년 3월 20번"
+  const m=String(key).match(/^(\d{2})(\d)_(\d+)$/);
+  if(!m) return key;
+  const yy=m[1], mm=parseInt(m[2]), no=m[3];
+  return `${yy}년 ${mm}월 ${no}번`;
+}
+let DATA=null;        // 현재 선택 지문 = VOCA_SENTENCE_DATA[curKey] (+ testKey/testLabel)
+let curKey=null;      // 현재 testKey
+function setCurKey(key){
+  curKey=key;
+  const src=VOCA_SENTENCE_DATA[key];
+  DATA={ testKey:key, testLabel:vsTestLabel(key), words:src.words, sentences:src.sentences };
+}
+
+function SESS_KEY(){return "voca-session-"+DATA.testKey;}
+function DONE_KEY(){return "voca-done-"+DATA.testKey;}
+function HIST_KEY(){return "voca-history-"+DATA.testKey;}
+
+function shuffle(a){const x=a.slice(); for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x;}
+function escapeHtml(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function gradeTyping(input, answer){ return input.trim().toLowerCase() === answer.trim().toLowerCase(); }
+function buildOptions(correctMeaning){
+  const allMeanings = DATA.words.map(w=>w[1]);  // 현재 지문 기준 (DATA 확정 후 호출됨)
+  const distract = shuffle(allMeanings.filter(m=>m!==correctMeaning)).slice(0,3);
+  return shuffle([correctMeaning, ...distract]);
+}
+function renderSentenceLearn(sentence, surface, suffix){
+  const idx=sentence.toLowerCase().indexOf(surface.toLowerCase());
+  if(idx<0) return escapeHtml(sentence);
+  const before=sentence.slice(0,idx);
+  const matched=sentence.slice(idx,idx+surface.length);   // 본문 실제 표기(대소문자 보존)
+  const after=sentence.slice(idx+surface.length);
+  // 규칙 활용(suffix有): 원형부만 밑줄, 어미는 밑줄 없이. 불규칙(suffix無): 통째 밑줄.
+  if(suffix && surface.length>suffix.length){
+    const stem=matched.slice(0, matched.length - suffix.length);  // 원형부
+    const tail=matched.slice(matched.length - suffix.length);     // 어미
+    return `${escapeHtml(before)}<span class="vs-target">${escapeHtml(stem)}</span>${escapeHtml(tail)}${escapeHtml(after)}`;
+  }
+  return `${escapeHtml(before)}<span class="vs-target">${escapeHtml(matched)}</span>${escapeHtml(after)}`;
+}
+function renderSentenceBlank(sentence, surface, suffix){
+  const idx=sentence.toLowerCase().indexOf(surface.toLowerCase());
+  if(idx<0) return escapeHtml(sentence);
+  const sufHtml = suffix? `<span class="vs-blank-suf">${escapeHtml(suffix)}</span>` : '';
+  return `${escapeHtml(sentence.slice(0,idx))}<span class="vs-blank"></span>${sufHtml}${escapeHtml(sentence.slice(idx+surface.length))}`;
+}
+
+// ---- 저장 계층 (window.storage 없으면 메모리 폴백) ----
+const memStore = {};
+const hasStorage = (typeof window!=='undefined' && window.storage && typeof window.storage.get==='function');
+async function storeSet(k,v){ if(hasStorage){try{await window.storage.set(k,v);return;}catch(e){}} memStore[k]=v; }
+async function storeGet(k){ if(hasStorage){try{const r=await window.storage.get(k);return r?r.value:null;}catch(e){}} return (k in memStore)?memStore[k]:null; }
+async function storeDel(k){ if(hasStorage){try{await window.storage.delete(k);return;}catch(e){}} delete memStore[k]; }
+
+async function saveSession(s){ await storeSet(SESS_KEY(), JSON.stringify(s)); }
+async function loadSession(){ const v=await storeGet(SESS_KEY()); return v?JSON.parse(v):null; }
+async function clearSession(){ await storeDel(SESS_KEY()); }
+async function setDone(b){ await storeSet(DONE_KEY(), b?"1":"0"); }
+async function getDone(){ return (await storeGet(DONE_KEY()))==="1"; }
+async function addHistory(indices){ const cur=await loadHistory(); const merged=Array.from(new Set([...cur, ...indices])); await storeSet(HIST_KEY(), JSON.stringify(merged)); }
+async function loadHistory(){ const v=await storeGet(HIST_KEY()); return v?JSON.parse(v):[]; }
+
+// ---- 상태 ----
+// 확인하기 세션 구조: { roundNo, queue(이번 라운드 남은 wi 배열), wrongThisRound(이번 라운드 틀린 wi), myAns:{wi:답} }
+let mode=null, sess=null, myAns={}, resumeSession=null, isDone=false;
+// 학습/복습용
+let order=[], pos=0, answered=false, wrongSimple=[];
+
+let home, run, startBtn, stage, pfill, counter, roundPill;
+const KEYS=['A','B','C','D'];
+
+async function refreshHome(){
+  // 홈(모드 선택)에서는 아직 지문 미선택 → 지문별 조회 안 함.
+  // 이어하기/완료/오답 상태는 지문을 고른 뒤(onPickKey) 판단.
+  const doneTag=document.getElementById('doneTag');
+  const db=document.getElementById('doneBadge');
+  const rb=document.getElementById('resumeBadge');
+  if(doneTag) doneTag.innerHTML='';
+  if(db) db.style.display='none';
+  if(rb) rb.style.display='none';
+  // 오답 카드는 항상 열어둠(지문 선택 후 이력 없으면 runMode에서 안내)
+  const reviewCard=document.querySelector('.vs-mode-card[data-mode="review"]');
+  const reviewBadge=document.getElementById('reviewBadge');
+  if(reviewCard) reviewCard.classList.remove('vs-disabled');
+  if(reviewBadge) reviewBadge.textContent='지문을 고르면 그 지문의 오답을 복습해요';
+}
+
+
+
+// ── 지문 선택 화면 ──
+function renderPicker(){
+  home.style.display='none';
+  const pick=document.getElementById('picker');
+  pick.style.display='block';
+  const modeLabel = mode==='learn'?'학습하기' : mode==='test'?'확인하기' : '오답 다시 풀기';
+  const keys=Object.keys(VOCA_SENTENCE_DATA);
+  const cards=keys.map(k=>{
+    const n=VOCA_SENTENCE_DATA[k].words.length;
+    return `<button class="vs-pick-btn" onclick="onPickKey('${k}')">${vsTestLabel(k)}<span class="vs-pick-n">${n}단어</span></button>`;
+  }).join('');
+  pick.innerHTML=`
+    <div class="vs-pick-head">
+      <button class="vs-exit" onclick="backToHome()">← 모드 선택</button>
+      <span class="vs-pick-mode">${modeLabel}</span>
+    </div>
+    <div class="vs-pick-title">지문을 선택하세요</div>
+    <div class="vs-pick-grid">${cards}</div>`;
+}
+function backToHome(){
+  document.getElementById('picker').style.display='none';
+  home.style.display='block';
+}
+async function onPickKey(key){
+  setCurKey(key);
+  // 선택 지문 기준으로 이어하기/완료/이력 새로고침
+  resumeSession = await loadSession();
+  isDone = await getDone();
+  document.getElementById('picker').style.display='none';
+  await runMode();
+}
+
+// 실제 모드 진행 (지문 확정 후)
+async function runMode(){
+  run.style.display='block';
+  const mp=document.getElementById('modePill');
+  mp.textContent = mode==='learn'?'학습 모드' : mode==='test'?'확인하기' : '오답 복습';
+  mp.className='vs-pill vs-mode-pill'+mode;
+  roundPill.style.display = mode==='test' ? 'inline-block' : 'none';
+
+  if(mode==='learn'){
+    order=shuffle(DATA.words.map((_,i)=>i)); pos=0; wrongSimple=[]; myAns={}; renderQuestion();
+  } else if(mode==='test'){
+    if(resumeSession && !isDone){ sess=resumeSession; myAns=sess.myAns||{}; }
+    else {
+      await setDone(false); isDone=false;
+      sess={ roundNo:1, queue:shuffle(DATA.words.map((_,i)=>i)), wrongThisRound:[], myAns:{} };
+      myAns={};
+    }
+    renderTestQuestion();
+  } else { // review
+    const hist=await loadHistory();
+    if(hist.length===0){ alert('이 지문에는 아직 틀린 단어가 없어요.'); backToHome(); return; }
+    order=shuffle(hist.slice()); pos=0; wrongSimple=[]; myAns={}; renderQuestion();
+  }
+}
+
+
+async function goHome(){
+  run.style.display='none'; const pk=document.getElementById('picker'); if(pk)pk.style.display='none'; home.style.display='block';
+  document.querySelectorAll('.vs-mode-card').forEach(x=>x.classList.remove('vs-active'));
+  startBtn.disabled=true; startBtn.textContent='시작하기'; mode=null; sess=null;
+  await refreshHome();
+}
+
+// ===== 확인하기: 라운드 큐 기반 =====
+function renderTestQuestion(){
+  const wi=sess.queue[0];
+  const [word,mean,sIdx,surface,suffix]=DATA.words[wi];
+  const sentence=DATA.sentences[sIdx];
+  // 정답: 규칙(suffix有)=원형, 불규칙(suffix無)=활용형(surface)
+  const answer = suffix ? word : surface;
+  // 이번 라운드 진행도: 시작 큐 길이 대비 (별도 추적)
+  if(sess.roundStartLen===undefined) sess.roundStartLen=sess.queue.length;
+  const doneInRound = sess.roundStartLen - sess.queue.length;
+  counter.textContent=`${doneInRound+1} / ${sess.roundStartLen}`;
+  roundPill.textContent = sess.roundNo===1 ? '1라운드' : `${sess.roundNo}라운드 (오답)`;
+  pfill.style.width=`${doneInRound/sess.roundStartLen*100}%`;
+  answered=false;
+
+  stage.innerHTML=`
+    <div class="vs-card">
+      <div class="vs-qlabel">${sess.roundNo===1?'확인하기':'틀린 단어 다시'} · 빈칸 단어를 쓰세요</div>
+      <p class="vs-sentence">${renderSentenceBlank(sentence,surface,suffix)}</p>
+      <div class="vs-meaning-box">
+        <div class="vs-lbl">빈칸 단어의 뜻 (원형)</div>
+        <div class="vs-mn">${escapeHtml(mean)}</div>
+      </div>
+      ${suffix? '' : `<div class="vs-irregular-note">이 단어는 빈칸에 <b>지문에 나온 형태 그대로</b> 쓰세요</div>`}
+      <div class="vs-typewrap">
+        <input class="vs-typein" id="typein" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${suffix? '원형 단어를 입력' : '지문의 형태 그대로 입력'}" />
+        ${suffix? `<span class="vs-suffix-hint">+ ${escapeHtml(suffix)}</span>`:''}
+      </div>
+      <div class="vs-feedback" id="fb"></div>
+      <div class="vs-next" id="nextwrap"></div>
+    </div>`;
+  const input=document.getElementById('typein');
+  input.focus();
+  input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); submitTest(answer,wi); } });
+  const nextwrap=document.getElementById('nextwrap');
+  const b=document.createElement('button'); b.className='vs-btn'; b.textContent='제출';
+  b.onclick=()=>submitTest(answer,wi); nextwrap.appendChild(b);
+}
+async function submitTest(answer, wi){
+  if(answered) return;
+  if(!sess) return;  // [②-b] 완료/정리 후 중복제출 방어
+  const input=document.getElementById('typein');
+  if(input.value.trim()==='') { input.focus(); return; }
+  answered=true; input.disabled=true;
+  const ok=gradeTyping(input.value,answer);
+  input.classList.add(ok?'vs-ok':'vs-no');
+  const fb=document.getElementById('fb');
+  fb.className='vs-feedback'+(ok?'vs-right':'vs-wrong');
+  fb.innerHTML='입력 완료';
+  sess.myAns[wi]=input.value.trim();
+  if(!ok){
+    sess.wrongThisRound.push(wi);
+    await addHistory([wi]); // 틀린 이력 영구 기록
+  }
+  sess.queue.shift(); // 현재 문제 제거
+  await saveSession(sess);
+  if(!sess) return;  // [②-b] await 사이 세션 정리 race 방어
+  // 버튼 → 다음
+  const nextwrap=document.getElementById('nextwrap'); if(!nextwrap) return; nextwrap.innerHTML='';
+  const b=document.createElement('button'); b.className='vs-btn';
+  const roundEnd = sess.queue.length===0;
+  b.textContent = roundEnd ? '라운드 결과' : '다음 문장';
+  b.onclick=async ()=>{ if(roundEnd) await endRound(); else renderTestQuestion(); };
+  nextwrap.appendChild(b);
+}
+
+async function endRound(){
+  const wrong=sess.wrongThisRound.slice();
+  if(wrong.length===0){
+    // 100% 완료
+    await setDone(true); await clearSession();
+    renderTestComplete();
+  } else {
+    // 다음 라운드 준비
+    renderRoundResult(wrong);
+  }
+}
+
+// 라운드 결과(아직 틀린 게 있음) → 다음 라운드로
+function renderRoundResult(wrong){
+  pfill.style.width='100%';
+  const myAnsSnap=sess.myAns;
+  const listHtml=wrong.map(wi=>{
+    const [w,mean,sIdx,surface,suffix]=DATA.words[wi];
+    const ans = suffix ? w : surface;  // 정답: 규칙=원형, 불규칙=활용형
+    const has=(myAnsSnap[wi]!==undefined && myAnsSnap[wi]!=='');
+    const mine=has?escapeHtml(myAnsSnap[wi]):'(빈칸)';
+    const mineCls=has?'vs-mine':'vs-mine vs-blank-ans';
+    return `<div class="vs-wrow"><span class="vs-w">${escapeHtml(w)}</span><span class="vs-cmp"><span class="${mineCls}">${mine}</span> → <span class="vs-ans">${escapeHtml(ans)}</span><span class="vs-mn2">${escapeHtml(mean)}</span></span></div>`;
+  }).join('');
+  stage.innerHTML=`
+    <div class="vs-card vs-result">
+      <h2>${sess.roundNo}라운드 끝</h2>
+      <div class="vs-round-banner">아직 <b>${wrong.length}개</b>가 남았어요. 이 단어들을 다 맞혀야 학습이 완료돼요.</div>
+      <div class="vs-wronglist"><h3>이번 라운드 오답</h3>${listHtml}</div>
+      <div class="vs-actions">
+        <button class="vs-btn" id="nextRound">다음 라운드 (${wrong.length})</button>
+        <button class="vs-btn vs-ghost" id="tohome">나가기 (이어서 가능)</button>
+      </div>
+    </div>`;
+  document.getElementById('nextRound').onclick=async ()=>{
+    sess.roundNo++;
+    sess.queue=shuffle(wrong);
+    sess.wrongThisRound=[];
+    sess.roundStartLen=sess.queue.length;
+    await saveSession(sess);
+    renderTestQuestion();
+  };
+  document.getElementById('tohome').onclick=async ()=>{
+    // 다음 라운드 큐를 미리 세팅해 저장(이어하기 시 오답부터)
+    sess.roundNo++; sess.queue=shuffle(wrong); sess.wrongThisRound=[]; sess.roundStartLen=sess.queue.length;
+    await saveSession(sess); goHome();
+  };
+}
+
+function renderTestComplete(){
+  pfill.style.width='100%';
+  stage.innerHTML=`
+    <div class="vs-card vs-result">
+      <div class="vs-clear-banner"><span class="vs-big">학습 완료!</span>${DATA.testLabel}의 모든 단어를 맞혔어요. 100% 완료 처리됐어요.</div>
+      <div class="vs-actions">
+        <button class="vs-btn vs-ghost" id="toreview">오답 다시 풀기로 복습</button>
+        <button class="vs-btn vs-ghost" id="tohome">모드 선택</button>
+      </div>
+    </div>`;
+  document.getElementById('tohome').onclick=goHome;
+  document.getElementById('toreview').onclick=async ()=>{
+    mode='review';
+    document.getElementById('modePill').textContent='오답 복습';
+    document.getElementById('modePill').className='vs-pill vs-mode-pill vs-review';
+    roundPill.style.display='none';
+    const hist=await loadHistory();
+    order=shuffle(hist.slice()); pos=0; wrongSimple=[]; myAns={}; renderQuestion();
+  };
+}
+
+// ===== 학습 & 오답복습: 4지선다 (간단 루프) =====
+function renderQuestion(){
+  answered=false;
+  const wi=order[pos];
+  const [word,mean,sIdx,surface,suffix]=DATA.words[wi];
+  const sentence=DATA.sentences[sIdx];
+  counter.textContent=`${pos+1} / ${order.length}`;
+  pfill.style.width=`${pos/order.length*100}%`;
+  const label = mode==='review' ? '틀렸던 단어 · 뜻은?' : '밑줄 친 단어의 뜻은?';
+  stage.innerHTML=`
+    <div class="vs-card">
+      <div class="vs-qlabel">문항 <b>${pos+1}</b> · ${label}</div>
+      <p class="vs-sentence">${renderSentenceLearn(sentence,surface,suffix)}</p>
+      <div class="vs-ask">밑줄 친 <span class="vs-surf">${escapeHtml(surface)}</span>, 원형 <span class="vs-lemma">${escapeHtml(word)}</span> 의 뜻은?</div>
+      <div class="vs-opts" id="opts"></div>
+      <div class="vs-feedback" id="fb"></div>
+      <div class="vs-next" id="nextwrap"></div>
+    </div>`;
+  const opts=buildOptions(mean);
+  const optsEl=document.getElementById('opts');
+  opts.forEach((m,i)=>{
+    const b=document.createElement('button'); b.className='vs-opt';
+    b.innerHTML=`<span class="vs-key">${KEYS[i]}</span><span>${escapeHtml(m)}</span>`;
+    b.onclick=()=>chooseChoice(b,m,mean,word);
+    optsEl.appendChild(b);
+  });
+}
+function chooseChoice(btn,picked,correct,word){
+  if(answered) return; answered=true;
+  const wi=order[pos];
+  const buttons=[...document.querySelectorAll('.vs-opt')];
+  buttons.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('fb');
+  if(picked===correct){
+    btn.classList.add('vs-correct'); buttons.forEach(b=>{ if(b!==btn) b.classList.add('vs-dim'); });
+    fb.className='vs-feedback vs-right'; fb.innerHTML=`정답이에요. <span class="vs-word">${escapeHtml(word)}</span> = ${escapeHtml(correct)}`;
+  } else {
+    btn.classList.add('vs-incorrect');
+    buttons.forEach(b=>{ if(b.textContent.trim().endsWith(correct)) b.classList.add('vs-correct'); else if(b!==btn) b.classList.add('vs-dim'); });
+    fb.className='vs-feedback vs-wrong'; fb.innerHTML=`다시 볼게요. <span class="vs-word">${escapeHtml(word)}</span> = ${escapeHtml(correct)}`;
+    if(!wrongSimple.includes(wi)) wrongSimple.push(wi);
+  }
+  const nextwrap=document.getElementById('nextwrap');
+  const isLast=pos===order.length-1;
+  const b=document.createElement('button'); b.className='vs-btn';
+  b.textContent=isLast?'결과 보기':'다음 문장';
+  b.onclick=()=>{ if(isLast) renderSimpleResult(); else { pos++; renderQuestion(); } };
+  nextwrap.appendChild(b);
+}
+function renderSimpleResult(){
+  pfill.style.width='100%';
+  const total=order.length, right=total-wrongSimple.length, pct= total? Math.round(right/total*100):100;
+  let wrongHtml;
+  if(wrongSimple.length===0) wrongHtml=`<div class="vs-empty-good">틀린 단어가 없어요. 잘했어요.</div>`;
+  else wrongHtml=wrongSimple.map(wi=>{ const [w,mean]=DATA.words[wi]; return `<div class="vs-wrow"><span class="vs-w" style="color:var(--wrong)">${escapeHtml(w)}</span><span class="vs-m">${escapeHtml(mean)}</span></div>`; }).join('');
+  const modeLabel = mode==='learn'?'학습':'오답 복습';
+  stage.innerHTML=`
+    <div class="vs-card vs-result">
+      <div class="vs-score">${pct}%<small> · ${right}/${total}</small></div>
+      <h2>${DATA.testLabel} · ${modeLabel}</h2>
+      <div class="vs-wronglist"><h3>이번 회차 오답</h3>${wrongHtml}</div>
+      <div class="vs-actions">
+        ${wrongSimple.length>0?`<button class="vs-btn" id="retry">이번 오답 다시 (${wrongSimple.length})</button>`:``}
+        <button class="vs-btn vs-ghost" id="tohome">모드 선택</button>
+      </div>
+    </div>`;
+  if(wrongSimple.length>0) document.getElementById('retry').onclick=()=>{ order=shuffle(wrongSimple.slice()); wrongSimple=[]; pos=0; renderQuestion(); };
+  document.getElementById('tohome').onclick=goHome;
+}
+
+// === [②-b 통합] 라이브 진입용 부트 함수 (로그인 후 호출) ===
+function sfvsBoot(){
+  home=document.getElementById('home'); run=document.getElementById('run');
+  startBtn=document.getElementById('start');
+  stage=document.getElementById('stage'); pfill=document.getElementById('pfill'); counter=document.getElementById('counter');
+  roundPill=document.getElementById('roundPill');
+  // 모드 카드 클릭 바인딩
+document.querySelectorAll('.vs-mode-card').forEach(c=>{
+  c.onclick=()=>{
+    if(c.classList.contains('vs-disabled')) return;
+    document.querySelectorAll('.vs-mode-card').forEach(x=>x.classList.remove('vs-active'));
+    c.classList.add('vs-active');
+    mode=c.dataset.mode;
+    startBtn.disabled=false;
+    if(mode==='test') startBtn.textContent = resumeSession && !isDone ? '이어서 풀기' : (isDone ? '다시 풀기' : '시작하기');
+    else startBtn.textContent='시작하기';
+  };
+});
+
+// 시작 버튼: 모드 확정 후 지문(testKey) 선택 화면으로
+startBtn.onclick=()=>{ renderPicker(); };
+  // 나가기 버튼 바인딩
+document.getElementById('exitBtn').onclick=async ()=>{
+  if(mode==='test' && sess && sess.queue.length>0){ await saveSession(sess); }
+  goHome();
+};
+  refreshHome();
+}
+
+// ===== [②-b] end =====
 </script>
 </body>
 </html>
