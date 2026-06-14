@@ -42,7 +42,7 @@ input:focus{border-color:#1B3A5C}
 .ck-no{background:#fff5f5!important;border-color:#dc2626!important;color:#dc2626!important}
 .drop-indicator{width:3px;min-height:36px;border-radius:3px;background:#1B3A5C;flex-shrink:0;align-self:center;animation:blink .6s ease-in-out infinite alternate}
 @keyframes blink{from{opacity:.3}to{opacity:1}}
-#drag-ghost{position:fixed;pointer-events:none;z-index:9999;background:#1B3A5C;color:#fff;border-radius:9px;padding:9px 14px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:.9;white-space:nowrap;transform:translate(-50%,-50%)}
+#drag-ghost{position:fixed;pointer-events:none;z-index:9999;background:#1B3A5C;color:#fff;border-radius:9px;padding:8px 13px;font-size:13.5px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:.82;white-space:nowrap;transform:translate(-50%,-150%)}
 .feedback{border-radius:10px;padding:13px 15px;margin-bottom:12px;font-size:13px;line-height:1.6}
 .fb-ok{background:#f0fdf4;border:1px solid #86efac;color:#15803d}.fb-no{background:#fff5f5;border:1px solid #fca5a5;color:#b91c1c}
 .fb-hint{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}.fb-trap{background:#eff6ff;border:1px solid #93c5fd;color:#1e40af}
@@ -63,6 +63,46 @@ input:focus{border-color:#1B3A5C}
 .pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-card{background:#fff;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+/* ===== Phase III 서술형 전용 스타일 ===== */
+.hint-method{font-size:11px;color:#94a3b8;text-align:center;margin-bottom:10px}
+.zone-lbl{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.passage{font-size:13.5px;line-height:1.85;color:#334155;background:#fcfcfd;border:1px solid #eef2f7;border-radius:12px;padding:14px 15px}
+.sum-box{font-size:15.5px;line-height:2.7;color:#1e293b;background:#f8fafc;border-radius:12px;padding:18px 14px;margin-bottom:16px}
+.slot{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:50px;min-height:36px;margin:3px 3px;padding:4px 10px;border-radius:8px;vertical-align:middle;font-size:13.5px;font-weight:600;transition:margin .15s,box-shadow .12s,background .15s}
+.slot.empty{border:2px dashed #cbd5e1;background:#fff;color:#cbd5e1}
+.slot.empty.drag-over{border-color:#1B3A5C;background:#eff6ff}
+/* 채워진 청크: 뚜렷한 경계 + 그림자로 구별성 강화 */
+.slot.filled{border:2px solid #16335a;background:#1B3A5C;color:#fff;cursor:grab;box-shadow:0 1px 3px rgba(27,58,92,.35)}
+.slot.filled:hover{background:#244b78;box-shadow:0 2px 6px rgba(27,58,92,.45)}
+.slot.filled:active{cursor:grabbing}
+.slot.filled.isblank{border-color:#c47f0a;background:#E8A010;box-shadow:0 1px 3px rgba(232,160,16,.4)}
+.slot.filled.isblank:hover{background:#f0a91c}
+.slot.dragging{opacity:.4}
+.slot.ok{border-color:#16a34a!important;background:#f0fdf4!important;color:#15803d!important;box-shadow:none!important}
+.slot.no{border-color:#dc2626!important;background:#fff5f5!important;color:#dc2626!important;box-shadow:none!important}
+/* 삽입 막대기: 굵고 명확하게. 밀려날 방향으로 청크가 비켜남 */
+.slot.insert-before{margin-left:18px}
+.slot.insert-after{margin-right:18px}
+.slot.insert-before::before,.slot.insert-after::after{content:"";position:absolute;top:-2px;bottom:-2px;width:6px;border-radius:3px;background:#E8A010;box-shadow:0 0 8px rgba(232,160,16,.7);z-index:5}
+.slot.insert-before::before{left:-12px}
+.slot.insert-after::after{right:-12px}
+.slot.locked{cursor:default;opacity:.92}
+.slot.locked::after{content:"🔒";font-size:9px;margin-left:4px;opacity:.55}
+.bank-zone{min-height:64px;background:#f1f5f9;border-radius:12px;padding:12px;display:flex;flex-wrap:wrap;gap:9px;align-items:flex-start;margin-bottom:14px;transition:background .2s}
+.bank-zone.drag-over{background:#fef3c7;outline:2px dashed #E8A010}
+.ck-input{background:#fffbeb;border:2px dotted #E8A010;color:#92400e;display:inline-flex;align-items:center;gap:4px;padding:7px 11px;cursor:text;border-radius:10px}
+.ck-input::before{content:"✎";font-size:12px;opacity:.75}
+.ck-input input{border:none;background:transparent;outline:none;font-size:13.5px;font-weight:700;color:#92400e;width:108px;font-family:inherit}
+.ck-input input::placeholder{color:#d6b772;font-weight:400}
+.ck-input.has-word{cursor:grab;background:#fff7e6}
+.ck-input.has-word::after{content:"↥ 끌어 넣기";font-size:10px;color:#b8860b;margin-left:2px;opacity:.85}
+.ck-word{background:#fff7e6;border-color:#E8A010;color:#92400e}.ck-word:hover{background:#fdecc8}
+.feedback{border-radius:10px;padding:13px 15px;margin-bottom:12px;font-size:13px;line-height:1.6}
+.fb-ok{background:#f0fdf4;border:1px solid #86efac;color:#15803d}.fb-no{background:#fff5f5;border:1px solid #fca5a5;color:#b91c1c}
+.expl{background:#f8fafc;border-left:3px solid #1B3A5C;border-radius:0 8px 8px 0;padding:11px 14px;margin-top:10px;font-size:12.5px;line-height:1.6;color:#334155}.expl b{color:#1B3A5C}
+.ans-line{font-size:14px;line-height:1.7;color:#15803d;background:#f0fdf4;border-radius:10px;padding:12px 14px;margin-top:6px}
+.back-link{font-size:12px;color:#64748b;cursor:pointer;display:inline-block;margin-bottom:8px}
+.back-link:hover{color:#1B3A5C}
 </style>
 </head>
 <body>
@@ -427,13 +467,18 @@ function render(){
 
   // 지문(A)
   h+=`<div class="card"><div class="zone-lbl">지문 (A)</div>
-    <div class="passage"><span class="pg-lbl">PASSAGE</span>${esc(D.passage)}</div></div>`;
+    <div class="passage">${esc(D.passage)}</div></div>`;
 
-  // 문제
+  // 문제 — hasBlank에 따라 발문/안내 분기
+  const stemText = D.hasBlank ? D.stem
+    : '(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하여(필요시 어법에 맞게 형태를 바꿀 것) (B)요약문을 완성하시오.';
+  const hintText = D.hasBlank
+    ? '보기 어구를 끌어다 빈칸에 순서대로 놓으세요. 점선(✎) 칸엔 원문에서 찾은 한 단어를 입력한 뒤, 그 단어도 끌어다 놓으면 됩니다.'
+    : '보기 어구를 끌어다 빈칸에 순서대로 놓으세요.';
   h+=`<div class="card">
     <div class="topbar"><span class="q-num">서술형 · 요약문 완성</span><span class="q-mode">Phase III</span></div>
-    <div class="phase-info"><b>${esc(D.stem)}</b></div>
-    <div class="hint-method">보기 어구를 끌어다 빈칸에 순서대로 놓으세요. 점선(✎) 칸엔 원문에서 찾은 한 단어를 입력한 뒤, 그 단어도 끌어다 놓으면 됩니다.</div>
+    <div class="phase-info"><b>${esc(stemText)}</b></div>
+    <div class="hint-method">${esc(hintText)}</div>
 
     <div class="zone-lbl">요약문 (B)</div>
     <div class="sum-box" id="sumBox">${renderSum()}</div>
@@ -596,14 +641,15 @@ function bindSlots(){
     el.addEventListener('dragend',()=>{el.classList.remove('dragging');clearDragOver();dragData=null;});
     // 드롭 타깃(채워진 슬롯) → 삽입+밀어내기
     el.addEventListener('dragover',e=>{ if(slots[i].locked) return; e.preventDefault();
-      if(dragData && dragData.src==='slot'){
-        // 마우스 좌우 위치로 삽입 막대기 표시
-        const r=el.getBoundingClientRect();
-        const before = (e.clientX < r.left + r.width/2);
-        el.classList.toggle('insert-before', before);
-        el.classList.toggle('insert-after', !before);
+      el.classList.remove('drag-over','insert-before','insert-after');
+      if(!dragData) return;
+      if(dragData.src==='slot'){
+        if(dragData.slotIdx===i){ return; } // 자기 자신엔 표시 안 함
+        const from=movablePos(dragData.slotIdx), to=movablePos(i);
+        el.classList.add(from>to ? 'insert-before' : 'insert-after');
       } else {
-        el.classList.add('drag-over');
+        // 뱅크/입력 청크 → 채워진 슬롯에 삽입(왼쪽에 끼고 기존 오른쪽 밀림)
+        el.classList.add('insert-before');
       }
     });
     el.addEventListener('dragleave',()=>{el.classList.remove('drag-over','insert-before','insert-after');});
@@ -641,14 +687,38 @@ function handleDropOnSlot(i){
     if(from===target) return;
     insertSlot(dragData.slotIdx, i);     // 삽입+밀어내기
   } else if(dragData.src==='bank'){
-    if(target.placed){ returnToBank(target.placed); } // 기존 것 회수 후 교체
-    target.placed=item; bank.splice(dragData.bankIdx,1);
+    if(target.placed){ insertExternal(item, i); bank.splice(dragData.bankIdx,1); }
+    else { target.placed=item; bank.splice(dragData.bankIdx,1); }
   } else if(dragData.src==='input'){
-    if(target.placed){ returnToBank(target.placed); }
     const ii=bank.findIndex(b=>b.kind==='input');
-    if(ii>-1){ bank[ii]={kind:'word',text:item.text}; target.placed=bank[ii]; bank.splice(ii,1); }
+    if(ii<0) return;
+    const wordItem={kind:'word',text:item.text};
+    if(target.placed){ bank[ii]=wordItem; insertExternal(wordItem, i); bank.splice(bank.indexOf(wordItem),1); }
+    else { bank[ii]=wordItem; target.placed=wordItem; bank.splice(ii,1); }
   }
   render();
+}
+
+// 외부(뱅크/입력) 청크를 채워진 슬롯 toIdx에 삽입. toIdx부터 뒤로 밀고,
+// 빈 슬롯이 있으면 그게 흡수, 없으면 맨 끝 청크가 뱅크로 회수.
+function insertExternal(item, toIdx){
+  const movable = slots.map((s,i)=>i).filter(i=>!slots[i].locked);
+  const seq = movable.map(i=>slots[i].placed);  // null 포함
+  const tp = movable.indexOf(toIdx);
+  if(tp<0) return;
+  seq.splice(tp,0,item);          // toIdx 자리에 삽입(뒤로 밀림)
+  // 슬롯 수 유지: 뒤쪽에서 첫 빈칸(null)을 제거해 흡수. 없으면 맨 끝 제거→뱅크.
+  let removeAt=-1;
+  for(let k=seq.length-1;k>tp;k--){ if(seq[k]===null){ removeAt=k; break; } }
+  if(removeAt>=0){ seq.splice(removeAt,1); }
+  else { const ov=seq.pop(); if(ov) returnToBank(ov); }
+  movable.forEach((idx,k)=> slots[idx].placed = (k<seq.length? seq[k] : null));
+}
+
+// 슬롯 인덱스 → 이동가능(잠기지 않은) 슬롯들 중 몇 번째인지
+function movablePos(idx){
+  const movable = slots.map((s,i)=>i).filter(i=>!slots[i].locked);
+  return movable.indexOf(idx);
 }
 
 // 삽입+밀어내기: fromIdx의 청크를 toIdx 자리에 끼워넣고 사이 청크들을 한 칸씩 민다.
@@ -745,7 +815,24 @@ function startPointerDrag(e){
   function mv(ev){ moveGhost(ev); const t=document.elementFromPoint(ev.clientX,ev.clientY);
     const se=t&&t.closest?t.closest('.slot'):null;
     const drop = (se && !se.classList.contains('locked')) ? se : null;
-    if(cur&&cur!==drop)cur.classList.remove('drag-over'); if(drop){drop.classList.add('drag-over');cur=drop;} else cur=null; }
+    if(cur&&cur!==drop) cur.classList.remove('drag-over','insert-before','insert-after');
+    if(drop){
+      drop.classList.remove('drag-over','insert-before','insert-after');
+      const dropIdx=+drop.dataset.slot;
+      if(drop.classList.contains('filled') && !(dragData.src==='slot' && dragData.slotIdx===dropIdx)){
+        // 채워진 슬롯에 드롭 → 삽입. 밀림 방향 예고.
+        if(dragData.src==='slot'){
+          const from=movablePos(dragData.slotIdx), to=movablePos(dropIdx);
+          drop.classList.add(from>to ? 'insert-before' : 'insert-after');
+        } else {
+          drop.classList.add('insert-before'); // 뱅크/입력 → 이 칸 자리에 끼고 기존은 오른쪽 밀림
+        }
+      } else {
+        drop.classList.add('drag-over');
+      }
+      cur=drop;
+    } else cur=null;
+  }
   function up(ev){ document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);
     if(ghost){ghost.remove();ghost=null;} el.classList.remove('dragging');
     const t=document.elementFromPoint(ev.clientX,ev.clientY);
@@ -755,7 +842,7 @@ function startPointerDrag(e){
       const bz=t&&t.closest?t.closest('#bank'):null;
       if(bz) handleDropOnBank();
     }
-    if(cur)cur.classList.remove('drag-over'); dragData=null;
+    if(cur)cur.classList.remove('drag-over','insert-before','insert-after'); dragData=null;
   }
   document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);
 }
