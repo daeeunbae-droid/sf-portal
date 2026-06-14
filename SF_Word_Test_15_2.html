@@ -1284,7 +1284,10 @@ function rAdminRender(a,snap){
                 <div style="font-size:14px;font-weight:700;color:#1B3A5C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${ex.label}</div>
                 <div style="font-size:11px;color:#aaa;margin-top:2px">${dateStr}${ex.wrongIdx.length?` · 틀린 단어 ${ex.wrongIdx.length}`:''}</div>
               </div>
-              <div style="font-size:15px;font-weight:800;color:${pColor};white-space:nowrap">${ex.pct}%</div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;white-space:nowrap">
+                <div style="font-size:15px;font-weight:800;color:${pColor};line-height:1.1">${ex.pct}%<span style="font-size:10px;font-weight:600;color:#aaa;margin-left:3px">1차</span></div>
+                <div style="font-size:11px;font-weight:700;color:#16a34a">완료 ✓</div>
+              </div>
               <div style="font-size:12px;color:#ccc">${open?'▲':'▼'}</div>
             </div>
             ${open?`<div style="padding:0 12px 10px">${body}</div>`:''}
@@ -1292,7 +1295,7 @@ function rAdminRender(a,snap){
         }).join('');
         vsDet=`<div class="card">
           <div style="font-size:15px;font-weight:800;color:#a07828;margin-bottom:4px">📖 SF Voca 문장 기록</div>
-          <div style="font-size:11px;color:#aaa;margin-bottom:12px">점수 = 처음 풀 때 정답률 · 줄을 누르면 틀린 단어가 펼쳐져요</div>
+          <div style="font-size:11px;color:#aaa;margin-bottom:12px">점수 = 1차(처음 풀 때) 정답률 · 완료 ✓ 는 0오답까지 끝낸 것 · 줄을 누르면 틀린 단어가 펼쳐져요</div>
           ${rows}
         </div>`;
       }
