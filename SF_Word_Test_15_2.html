@@ -1128,10 +1128,33 @@ function hi(){
 }
 
 // ─── ADMIN ───
+// ── 문장형(voca_sentence) 관리자 데이터 선행 로딩 ──
+// results·wrong 두 노드를 읽어 S.vsResults / S.vsWrong 에 캐시한 뒤 cb 호출.
+// 실패/없음은 빈 객체로 폴백(기존 단어시험 화면 동작 보장).
+function loadVsAdmin(cb){
+  if(!(typeof DB!=='undefined' && DB && typeof DB.ref==='function')){
+    S.vsResults={}; S.vsWrong={}; cb(); return;
+  }
+  let done=0; const need=2;
+  const fin=()=>{ if(++done>=need) cb(); };
+  try{
+    DB.ref('voca_sentence/results').once('value',s=>{ S.vsResults=s.val()||{}; fin(); },()=>{ S.vsResults={}; fin(); });
+  }catch(e){ S.vsResults={}; fin(); }
+  try{
+    DB.ref('voca_sentence/wrong').once('value',s=>{ S.vsWrong=s.val()||{}; fin(); },()=>{ S.vsWrong={}; fin(); });
+  }catch(e){ S.vsWrong={}; fin(); }
+}
+
 function rAdmin(a){
   a.innerHTML='<div style="text-align:center;padding:40px"><div style="color:#888">데이터 불러오는 중...</div></div>';
   const adminTimeout=setTimeout(()=>{const el=document.getElementById('app');if(el&&el.innerHTML.includes('데이터 불러오는 중')){el.innerHTML='<div style="text-align:center;padding:32px"><div style="font-size:16px;font-weight:800;color:#dc2626">⚠️ 연결 실패</div><div style="font-size:13px;color:#888;margin-top:8px">Firebase 연결 안 됨.<br>인터넷 연결을 확인해주세요.</div><button class="btn bo mt12" onclick="S.sc=\'login\';R()">← 돌아가기</button></div>';}},8000);
   DB.ref('results').once('value',snap=>{clearTimeout(adminTimeout);
+    loadVsAdmin(()=>rAdminRender(a,snap));
+  });
+}
+
+function rAdminRender(a,snap){
+  {
     // Firebase 데이터 → 학생별 정리
     const sts={};
     S.adminStsCache=sts;
@@ -1145,7 +1168,33 @@ function rAdmin(a){
       });
       if(recs.length) sts[sk]={name:recs[recs.length-1].s||sk, recs};
     });
-    const keys=Object.keys(sts).sort();
+
+    // ── 문장형 데이터: 학생키 합집합 ──
+    const vsRes=S.vsResults||{}, vsWr=S.vsWrong||{};
+    const allKeys={};
+    Object.keys(sts).forEach(k=>allKeys[k]=1);
+    Object.keys(vsRes).forEach(k=>allKeys[k]=1);
+    const keys=Object.keys(allKeys).sort();
+
+    // 문장형: 학생 한 명의 완료 시험 목록 [{testKey,label,pct,completedAt,rounds,wrongIdx[]}], 최신순
+    function vsExamsOf(sk){
+      const r=vsRes[sk]; if(!r) return [];
+      return Object.keys(r).map(tk=>{
+        const rec=r[tk]||{};
+        const total=rec.totalWords||0, ftw=rec.firstTryWrong||0;
+        const pct = total>0 ? Math.round((total-ftw)/total*100) : 0;
+        // 틀린 단어 인덱스: wrong 노드에서 (완료 후에도 잔존)
+        const wobj=(vsWr[sk]&&vsWr[sk][tk])||{};
+        const wrongIdx=Object.keys(wobj).map(Number).filter(n=>!isNaN(n)).sort((x,y)=>x-y);
+        return { testKey:tk, label:vsTestLabel(tk), pct, completedAt:rec.completedAt||0, rounds:rec.rounds||1, wrongIdx };
+      }).sort((x,y)=>y.completedAt-x.completedAt);
+    }
+    // 인덱스 → 단어 복원 (없으면 인덱스 표시)
+    function vsWordOf(testKey,idx){
+      const src=(typeof VOCA_SENTENCE_DATA!=='undefined')?VOCA_SENTENCE_DATA[testKey]:null;
+      const w=src&&src.words&&src.words[idx];
+      return w ? {en:w[0], ko:w[1]} : {en:'#'+idx, ko:''};
+    }
 
     let det='';
     if(S.adminStudent){
@@ -1198,23 +1247,69 @@ function rAdmin(a){
           </div>`;
         }).join('');
         det=`<div class="card">
-          <div style="font-size:15px;font-weight:800;color:#1B3A5C;margin-bottom:4px">${name} — 시험 기록</div>
+          <div style="font-size:15px;font-weight:800;color:#1B3A5C;margin-bottom:4px">${name} — 단어시험 기록</div>
           <div style="font-size:11px;color:#aaa;margin-bottom:12px">줄을 누르면 틀린 단어가 펼쳐져요</div>
           ${examRows||'<div style="color:#888;font-size:13px">기록 없음</div>'}
         </div>`;
       }
     }
 
-    if(S.adminStudent && sts[S.adminStudent]){
+    // ── 문장형(SF Voca 문장) 상세 카드 ──
+    let vsDet='';
+    if(S.adminStudent){
+      const sk=S.adminStudent;
+      const exams=vsExamsOf(sk);
+      if(exams.length){
+        const rows=exams.map(ex=>{
+          const recKey='vs:'+ex.testKey;
+          const open=S.adminOpenRec===recKey;
+          const d=ex.completedAt?new Date(ex.completedAt):null;
+          const dateStr=d?`${d.getFullYear()%100}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`:'';
+          const pColor=ex.pct>=90?'#16a34a':ex.pct>=70?'#E8A010':'#dc2626';
+          let body='';
+          if(open){
+            if(ex.wrongIdx.length===0){
+              body=`<div style="padding:10px 0;color:#16a34a;font-size:13px;font-weight:700">한 번도 안 틀렸어요 ✓</div>`;
+            }else{
+              body=`<div style="padding:6px 0 2px">`+ex.wrongIdx.map(idx=>{
+                const wd=vsWordOf(ex.testKey,idx);
+                return`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 2px;border-bottom:1px solid #f1f5f9">
+                  <div><span style="font-size:13px;font-weight:700;color:#1B3A5C">${wd.en}</span> <span style="font-size:12px;color:#888">${wd.ko}</span></div></div>`;
+              }).join('')+`</div>`;
+            }
+          }
+          return`<div style="border:1px solid ${open?'#a07828':'#eee'};border-radius:10px;margin-bottom:8px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:8px;padding:11px 12px;cursor:pointer;background:${open?'#faf6ee':'#fff'}" onclick="toggleRec('${recKey}')">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#1B3A5C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${ex.label}</div>
+                <div style="font-size:11px;color:#aaa;margin-top:2px">${dateStr}${ex.wrongIdx.length?` · 틀린 단어 ${ex.wrongIdx.length}`:''}</div>
+              </div>
+              <div style="font-size:15px;font-weight:800;color:${pColor};white-space:nowrap">${ex.pct}%</div>
+              <div style="font-size:12px;color:#ccc">${open?'▲':'▼'}</div>
+            </div>
+            ${open?`<div style="padding:0 12px 10px">${body}</div>`:''}
+          </div>`;
+        }).join('');
+        vsDet=`<div class="card">
+          <div style="font-size:15px;font-weight:800;color:#a07828;margin-bottom:4px">📖 SF Voca 문장 기록</div>
+          <div style="font-size:11px;color:#aaa;margin-bottom:12px">점수 = 처음 풀 때 정답률 · 줄을 누르면 틀린 단어가 펼쳐져요</div>
+          ${rows}
+        </div>`;
+      }
+    }
+
+    if(S.adminStudent && (sts[S.adminStudent] || (vsRes[S.adminStudent]))){
       // ── 학생 상세 뷰 ──
       const sk=S.adminStudent;
+      const dispName=(sts[sk]&&sts[sk].name)||sk;
+      const detOrEmpty = det || `<div class="card"><div style="font-size:15px;font-weight:800;color:#1B3A5C;margin-bottom:4px">${dispName} — 단어시험 기록</div><div style="color:#888;font-size:13px">기록 없음</div></div>`;
       a.innerHTML=`<div class="fb mb12">
         <button class="btn bo" style="padding:6px 14px;font-size:12px;width:auto" onclick="S.adminStudent=null;S.adminOpenRec=null;rAdmin(document.getElementById('app'))">← 학생 목록</button>
         <div style="display:flex;gap:6px">
           <button class="btn bo" style="padding:6px 14px;font-size:12px;width:auto" onclick="copyResult('${sk}')">📋 결과복사</button>
           <button class="btn bo" style="padding:6px 14px;font-size:12px;width:auto" onclick="rAdmin(document.getElementById('app'))">🔄</button>
         </div></div>
-      ${det}`;
+      ${detOrEmpty}${vsDet}`;
     }else{
       // ── 학생 목록 뷰 ──
       a.innerHTML=`<div class="fb mb12"><div style="font-size:18px;font-weight:800;color:#1B3A5C">🔒 관리자</div>
@@ -1227,23 +1322,35 @@ function rAdmin(a){
     </div>
     <div class="card"><div style="font-size:14px;font-weight:800;color:#1B3A5C;margin-bottom:10px">학생 (${keys.length}명)</div>
       ${keys.length?keys.map(sk=>{
-        const {name,recs}=sts[sk];
-        const l=recs[recs.length-1],p=Math.round(l.c/l.t*100);
-        const pend=recs.reduce((s,x)=>s+(x.w||[]).filter(w=>w.dp===true).length,0);
+        const entry=sts[sk];
+        const vsExams=vsExamsOf(sk);
+        const dispName=(entry&&entry.name)||sk;
+        // 대표 점수/회차: 단어시험 우선, 없으면 문장형 최신
+        let p=null, cntLabel='';
+        if(entry){
+          const l=entry.recs[entry.recs.length-1]; p=Math.round(l.c/l.t*100);
+          const pend=entry.recs.reduce((s,x)=>s+(x.w||[]).filter(w=>w.dp===true).length,0);
+          cntLabel=`단어 ${entry.recs.length}회${pend?' · 📋검토'+pend:''}`;
+        }
+        if(vsExams.length){
+          if(p===null) p=vsExams[0].pct;
+          cntLabel += (cntLabel?' · ':'')+`문장 ${vsExams.length}회`;
+        }
+        const pColor=p===null?'#888':(p>=90?'#16a34a':p>=70?'#E8A010':'#dc2626');
         return`<div class="wi">
           <div style="flex:1;cursor:pointer" onclick="S.adminStudent='${sk}';S.adminOpenRec=null;rAdmin(document.getElementById('app'))">
-            <div style="font-size:15px;font-weight:700;color:#1B3A5C">${name}</div>
-            <div style="font-size:12px;color:#888">${recs.length}회${pend?' · 📋검토'+pend:''}</div>
+            <div style="font-size:15px;font-weight:700;color:#1B3A5C">${dispName}</div>
+            <div style="font-size:12px;color:#888">${cntLabel||'기록 없음'}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-            <div style="font-size:14px;font-weight:800;color:${p>=90?'#16a34a':p>=70?'#E8A010':'#dc2626'}">${p}%</div>
-            <button onclick="copyResult('${sk}');event.stopPropagation()" style="padding:3px 8px;font-size:10px;font-weight:700;border:1px solid #1B3A5C;border-radius:6px;background:#fff;color:#1B3A5C;cursor:pointer">📋 결과복사</button>
+            <div style="font-size:14px;font-weight:800;color:${pColor}">${p===null?'—':p+'%'}</div>
+            ${entry?`<button onclick="copyResult('${sk}');event.stopPropagation()" style="padding:3px 8px;font-size:10px;font-weight:700;border:1px solid #1B3A5C;border-radius:6px;background:#fff;color:#1B3A5C;cursor:pointer">📋 결과복사</button>`:''}
           </div>
         </div>`;
       }).join(''):'<div style="color:#888;font-size:13px">기록 없음</div>'}
     </div>`;
     }
-  });
+  }
 }
 
 function exitAdmin(){
