@@ -93,6 +93,7 @@ function R(){
   else if(S.screen==='home') el.innerHTML=vHome();
   else if(S.screen==='phase') el.innerHTML=vPhase();
   else if(S.screen==='quiz'){el.innerHTML=vQuiz();bindDnd();}
+  else if(S.screen==='phase3'){el.innerHTML=vPhase3();}
   else if(S.screen==='resume') el.innerHTML=vResume();
   else if(S.screen==='setdone') el.innerHTML=vSetDone();
   else if(S.screen==='admin') vAdmin();
@@ -158,7 +159,9 @@ function vPhase(){
   const p=DATA.passages.find(x=>x.id===S.pid);
   let h=`<div class="card"><span class="back-link" onclick="goHome()">← 지문 목록</span><div class="set-title" style="font-size:17px">${esc(p.title)}</div><div class="set-meta" style="margin-top:6px">${esc(p.topic)}</div></div>`;
   h+=`<div class="card"><h2 class="sec">단계 선택</h2><div class="phase-info"><b>Phase I · 구조 복원</b><br>문장의 큰 뼈대(주어·동사·목적어)와 수식어 덩어리를 배열합니다.</div><button class="btn bn" onclick="startPhase('I')">Phase I 시작 (구조 복원)</button>`;
-  h+=`<div class="phase-info" style="margin-top:16px"><b>Phase II · 구조 세분화 + 어법</b><br>청크를 더 잘게 나누어 배열하고 어법 포인트까지 확인합니다.</div><button class="btn bg" onclick="startPhase('II')">Phase II 시작 (세분화 + 어법)</button></div>`;
+  h+=`<div class="phase-info" style="margin-top:16px"><b>Phase II · 구조 세분화 + 어법</b><br>청크를 더 잘게 나누어 배열하고 어법 포인트까지 확인합니다.</div><button class="btn bg" onclick="startPhase('II')">Phase II 시작 (세분화 + 어법)</button>`;
+  if(P3.has(S.pid)){ h+=`<div class="phase-info" style="margin-top:16px"><b>Phase III · 서술형 (요약문 완성)</b><br>지문을 한 문장으로 요약합니다. 보기 어구를 순서대로 배열하고, 원문에서 찾은 한 단어를 추가합니다.</div><button class="btn bo" onclick="S.screen='phase3';R();">Phase III 시작 (서술형)</button>`; }
+  h+=`</div>`;
   return h;
 }
 function goHome(){S.screen='home';S.pid=null;R();}
@@ -392,6 +395,384 @@ function adminDetail(i){
 })();
 
 R();
+
+/* ===== Phase III (서술형) 통합 모듈 ===== */
+var P3 = (function(){
+  const DATA = {"map":{"mock_2026_03_20":"20","mock_2026_03_21":"21","mock_2026_03_22":"22","mock_2026_03_23":"23","mock_2026_03_24":"24","mock_2026_03_29":"29","mock_2026_03_30":"30","mock_2026_03_31":"31","mock_2026_03_32":"32","mock_2026_03_33":"33","mock_2026_03_34":"34","mock_2026_03_35":"35","mock_2026_03_36":"36","mock_2026_03_37":"37","mock_2026_03_38":"38","mock_2026_03_39":"39","mock_2026_03_40":"40","mock_2026_03_41":"41","mock_2026_03_41_42":"41"},"passages":{"20":{"num":20,"title":"26년 3월 고1 20번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"There is simply no better way to influence or stir an audience — instantly, powerfully, authentically — than by opening up to them with a personal story or anecdote. To be clear: I'm not saying you need to tell them long stories about your family vacations or show them baby pictures from the stage. I'm saying that you can share a key biographical detail, or an emotion that you're feeling in the moment, or a self-deprecating joke. It is a tried-and-tested way of bonding with an audience of strangers — and of laying the groundwork for you to then persuade them. The harsh reality is that people won't bond with your arguments in a vacuum, but they will, says speech coach Bas van den Beld, \"bond with you\" — the person making those arguments. By sharing a revealing story or a personal flaw, you allow audience members a way to identify with you.","sum":"________ ________ ________ ________ ________ ________ ________ with the speaker ________ ________","bogi":["is","than","for stirring","with abstract arguments alone","sharing personal stories","bond","instantly, since people are more likely to","an audience's emotions","the most powerful method"],"answerSeq":["sharing personal stories","is","the most powerful method","for stirring","an audience's emotions","instantly, since people are more likely to","bond","than","with abstract arguments alone"],"hasBlank":false,"addWord":null,"answer":"Sharing personal stories is the most powerful method for stirring an audience's emotions instantly, since people are more likely to bond with the speaker than with abstract arguments alone.","exp":"[정답 근거] 세트2 요약문 활용. [추가 단어] bond (본문 동일철자, 'than with abstract arguments alone' 대조구조로 identify 배제 → 유일). [변환] 보기 셔플(청크 배열). 주어 'Sharing personal stories'·'is' 청크화로 주제 핵심 배열 강화.","acceptVariants":{}},"21":{"num":21,"title":"26년 3월 고1 21번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"We are now at a point of unprecedented genetic, cultural, and environmental power as a species, and we are linked to nearly every other person on Earth. We are embodied individuals trapped within limited time, but we are also networked data streams, memories, and influencers, and part of a grander humanity. Our decisions today have far-reaching impacts that place a responsibility on us to become good ancestors, to take the long view and time travel forward to imagine the well-being of billions of people whose lives will be lived in the world we are currently making. Centuries ago, leaders of the native North American Iroquois people created \"seven generation stewardship,\" instructing people to consider the impact of every decision on their children, seven generations into the future. In the precious few decades that Earth is ours, while we enjoy the gardens planted by our ancestors, we must not steal the shade from our descendants.","sum":"As a powerful species, we have a ________ ________ ________ ________ ________ ________.","bogi":["will be shaped","whose","by our decisions","lives","to future generations"],"answerSeq":["__BLANK__","to future generations","whose","lives","will be shaped","by our decisions"],"hasBlank":true,"addWord":"responsibility","answer":"As a powerful species, we have a responsibility to future generations whose lives will be shaped by our decisions.","exp":"[정답 근거] 본문 'place a responsibility on us' + 'whose lives will be lived in the world we are currently making'. [핵심 구문] 소유격 관계사 whose — 선행사 future generations의 lives를 수식. [추가 단어] responsibility (본문 동일어, 빈칸 'have a ___ to'에서 유일).","acceptVariants":{}},"22":{"num":22,"title":"26년 3월 고1 22번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Despite learned eating behaviors that are formed in early childhood and inborn biological differences, taste preferences can be changed throughout our lives due to neuroplasticity, our brain's amazing adaptability: There is far more flexibility in our food behaviors than most think, even as we age. This is terrific news for adventurous eaters who want to expand their dinner menu — it's a big, tasty world out there! — but it's amazing news for those eager to break poor diet habits. Just as kids gradually learn to like nutritious foods, so, too, can adults readjust their taste. Many who switch from processed grain foods like white bread and white rice to whole grain types, for instance, gradually learn to prefer the nutty flavors and chewy textures. Repeated exposure — and a willingness to change — is the key.","sum":"Due to neuroplasticity, the brain's amazing _______, _______ _______ _______, and through repeated exposure and a willingness to change, _______ _______.","bogi":["individuals can break","taste preferences","are not fixed","poor eating habits","formed in childhood"],"answerSeq":["__BLANK__","taste preferences","formed in childhood","are not fixed","individuals can break","poor eating habits"],"hasBlank":true,"addWord":"adaptability","answer":"Due to neuroplasticity, the brain's amazing adaptability, taste preferences formed in childhood are not fixed, and through repeated exposure and a willingness to change, individuals can break poor eating habits.","exp":"","acceptVariants":{}},"23":{"num":23,"title":"26년 3월 고1 23번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Conformity in the teenage years has been studied by putting young people in situations where they are asked to make a choice or decision that appears to go against what everyone else in the group is saying. The fascinating thing about the results of these studies is that conformity is not spread equally across all age groups. Thus, the willingness to go along with others reaches a peak around the age of 14. After that, this tendency decreases, so that by 16 or 17, young people are much more able to disagree with the group and to stand up for their own opinion. This is an important finding. It demonstrates that the influence of the peer group is not the same across all ages. As young people mature, they become more resilient, and more able to defend their opinions as individuals.","sum":"Peer conformity _______ _______ _______, _______ _______ _______.","bogi":["their own opinions","and then declines","reaches","so older adolescents become better able to","a peak around age 14"],"answerSeq":["reaches","a peak around age 14","and then declines","so older adolescents become better able to","__BLANK__","their own opinions"],"hasBlank":true,"addWord":"defend","answer":"Peer conformity reaches a peak around age 14 and then declines, so older adolescents become better able to defend their own opinions.","exp":"[정답 근거] 본문 14세 전후 또래동조 정점 후 감소 → 나이 든 청소년이 자기 의견 방어. [핵심 구문] (fallback Type B) 병렬 and then + 인과 so. [추가 단어] defend (본문 'defend their opinions' 동일어).","acceptVariants":{}},"24":{"num":24,"title":"26년 3월 고1 24번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Habits aren't bad. We need them to survive. Understanding how the brain uses habits, and how you can work with them, is essential for business. One question to ask is, are you really trying to break a habit, or would you do better by attaching to another one (known as temptation bundling)? Wharton professor Katy Milkman led a research project called Holding the Hunger Games Hostage at the Gym, where participants could only have access to their audio devices while at the gym. This uses a tempting habit -- listening to that awesome audiobook -- and combines it with a habit people would like to build, but may otherwise feel forced to put off, like exercising. The participants whose devices were \"held hostage\" were 51 percent more likely to visit the gym. And the really amazing thing is what happened after it was over: nearly two-thirds opted to pay to have gym-only access for their devices!","sum":"Rather than simply trying to _______ _______ _______ _______ _______ we already enjoy","bogi":["we can more effectively","by combining it with","break a habit","change behavior","an activity"],"answerSeq":["break a habit","we can more effectively","change behavior","by combining it with","an activity"],"hasBlank":false,"addWord":null,"answer":"Rather than simply trying to break a habit, we can more effectively change behavior by combining it with an activity we already enjoy.","exp":"[정답 근거] 세트2 요약문 활용. [추가 단어] 없음 (added 없는 순수 배열형 — #P4-L74 break/build 양립으로 통합형 added 부적합 → added 제거, break를 보기 청크에 포함). [변환] combines→combining 형태 변형. [변환] 보기 셔플(청크 배열).","acceptVariants":{}},"29":{"num":29,"title":"26년 3월 고1 29번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"A conceptual model is an explanation, usually highly simplified, of how something works. It doesn't have to be complete or even accurate as long as it is useful. The files, folders, and icons you see displayed on a computer screen help people create the conceptual model of documents and folders inside the computer. In fact, there are no folders inside the computer -- those are effective conceptualizations designed to make them easier to use. Sometimes these depictions can add to the confusion, however. When reading e-mail or visiting a website, the material appears to be on the device, for that is where it is displayed and used. But in fact, in many cases the actual material is \"in the cloud,\" located on some distant machine. The conceptual model is of one, coherent image, whereas it may actually consist of parts, each located on different machines that could be almost anywhere in the world.","sum":"A conceptual model is a highly _______ _______ _______ _______, even though _______ _______ _______","bogi":["that does not need to be accurate","its actual components","on different machines","explanation","may be located","but helps users make sense of a system"],"answerSeq":["__BLANK__","explanation","that does not need to be accurate","but helps users make sense of a system","its actual components","may be located","on different machines"],"hasBlank":true,"addWord":"simplified","answer":"A conceptual model is a highly simplified explanation that does not need to be accurate, but helps users make sense of a system, even though its actual components may be located on different machines.","exp":"","acceptVariants":{}},"30":{"num":30,"title":"26년 3월 고1 30번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"The principal transportation mode in the developing world, even in large cities, is still walking because of constraints on the resources needed to operate extensive transit systems. People cover long distances on foot every day and expend human energy that they can hardly spare. Walking under those conditions is an unavoidable burden that consumes productive capability. In North America and Western Europe, however, the attitude and policies are just the opposite: walking is efficient, healthful, and natural. We should do more of it -- almost everybody agrees -- and some of the current trends should be reversed. Ironically, among the most popular exercise machines in health clubs and in homes are treadmills that simulate walking, which could be otherwise accomplished with a transport purpose on the street.","sum":"While ________ ________ ________ ________ in developing countries due to ________, it ________ ________ ________ in wealthier nations","bogi":["is","limited resources","an efficient and","walking","beneficial activity","an unavoidable","consider"],"answerSeq":["walking","is","an unavoidable","__BLANK__","limited resources","consider","an efficient and","beneficial activity"],"hasBlank":true,"addWord":"burden","answer":"While walking is an unavoidable burden in developing countries due to limited resources, it is considered an efficient and beneficial activity in wealthier nations.","exp":"","acceptVariants":{"consider":["consider","is considered"]}},"31":{"num":31,"title":"26년 3월 고1 31번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Just like how other rooms in your home can cause anxiety when filled with too much stuff, the same is true for kids. If the play space houses every single toy that has ever been purchased for them since birth, they may not be able to express their feelings, but they can feel overwhelmed by so much stuff. This reminds us of how women look in their closets packed full of clothes and think, \"I have nothing to wear.\" Simplification helps everyone see what they have and use what they own. When there's too much to see, too much to step over, and too much input, kids have a hard time making a choice. Streamlining a play space is so important. You want your kids to feel inspired and imaginative in the room -- not overcome with indecision.","sum":"_______ _______ _______ _______ _______ _______ _______","bogi":["helps kids","about","Simplifying","make a","what they have","a play space"],"answerSeq":["Simplifying","a play space","helps kids","make a","__BLANK__","about","what they have"],"hasBlank":true,"addWord":"choice","answer":"Simplifying a play space helps kids make a choice about what they have.","exp":"","acceptVariants":{}},"32":{"num":32,"title":"26년 3월 고1 32번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Students often mistake familiarity with true mastery, creating a dangerous \"illusion of competence\" where recognizing information feels like genuine knowledge, but they struggle when asked to recall or apply it independently. This cognitive bias, strengthened by passive study methods, leads learners to overestimate their understanding. Teaching materials (even informally or imaginatively) actively counter this illusion by requiring deep processing, active recall, structured organization, and revealing gaps in knowledge. It introduces powerful methods like teaching imaginary students, peer-teaching in study groups, employing the Feynman Technique, and writing explanations for others. Ultimately, adopting the teacher mindset transforms surface familiarity into real mastery, exposing and filling gaps in knowledge and ensuring solid, reliable understanding.","sum":"_______ _______ _______ _______ _______ _______ _______ _______","bogi":["by requiring","while exposing","Teaching others","gaps in knowledge","the illusion of","deep processing","counters"],"answerSeq":["Teaching others","counters","the illusion of","__BLANK__","by requiring","deep processing","while exposing","gaps in knowledge"],"hasBlank":true,"addWord":"competence","answer":"Teaching others counters the illusion of competence by requiring deep processing while exposing gaps in knowledge.","exp":"","acceptVariants":{}},"33":{"num":33,"title":"26년 3월 고1 33번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"From around 3000 BC, the Sumerian officials would mark their lists of goods on clay tablets. If they wanted to record five fish, they would mark five pictures of a fish. Their first great intellectual leap came from separating the number from the object they were counting. In other words, they would represent five fish with a numeral for the number five alongside a symbol for the fish. If they wanted to describe five of something else, they realized they could keep the same numeral and trade the object symbol for a cow, or a jar of oil, or whatever else they were interested in. The Sumerians had developed the idea of an emancipated number, existing in its own right and independent of whatever it is being used to count. It is easy to take the emancipated number for granted as it is so deeply set into modern thought, but to the earliest civilizations it was intellectually new and extremely powerful.","sum":"The Sumerians' first great intellectual _______ _______ _______ _______ _______ _______ _______","bogi":["separating numbers from objects","that exists independently of","creating the concept of","what it counts","came from","an emancipated number"],"answerSeq":["__BLANK__","came from","separating numbers from objects","creating the concept of","an emancipated number","that exists independently of","what it counts"],"hasBlank":true,"addWord":"leap","answer":"The Sumerians' first great intellectual leap came from separating numbers from objects, creating the concept of an emancipated number that exists independently of what it counts.","exp":"[정답 근거] 본문 'Their first great intellectual leap came from separating the number from the object'에서 leap(추가단어). emancipated number는 본문 'the idea of an emancipated number, existing in its own right and independent of whatever it is being used to count' 복원.","acceptVariants":{}},"34":{"num":34,"title":"26년 3월 고1 34번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"The emphasis on learning from the ingroup takes little account of individuals. Amazingly, while we may dislike some of the people in our ingroup, we still copy them. Wilks, Kirby, and Nielsen studied copying behavior in the context of observing how to open a puzzle box. Ingroups and outgroups were distinguished in a minimal way, using simple color coding of wristbands. The children did not simply like all members of their ingroup; they disliked those who behaved in an antisocial fashion. Indeed, they liked these antisocial ingroup members less than the prosocial members of an outgroup. Still, their dislike did not affect their tendency to copy ingroup behavior more closely than outgroup behavior. This overimitation reveals that we are not copying in order to learn how to open a box most efficiently. We want to learn how to do it in the proper way -- in other words, conforming to the rules and conventions of the ingroup. This will be appropriately demonstrated even by antisocial ingroup members.","sum":"Regardless of personal dislike, children copy ingroup behavior more closely than outgroup behavior _______ _______ _______ _______ _______","bogi":["group learning involves","of the ingroup","showing that","to the rules and conventions"],"answerSeq":["showing that","group learning involves","__BLANK__","to the rules and conventions","of the ingroup"],"hasBlank":true,"addWord":"conforming","answer":"Regardless of personal dislike, children copy ingroup behavior more closely than outgroup behavior, showing that group learning involves conforming to the rules and conventions of the ingroup.","exp":"[정답 근거] 본문 'conforming to the rules and conventions of the ingroup'에서 conforming(추가단어). 부사구 'regardless of personal dislike'는 고정부 문두 배치(위치 자유 부사구 보기 제외 규칙). 'their dislike did not affect their tendency to copy ingroup behavior more closely than outgroup behavior' 복원.","acceptVariants":{}},"35":{"num":35,"title":"26년 3월 고1 35번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"The \"set point theory\" concept is that your body has a stable quantity of fat cells by the time you are an adult. The more weight you carried in your childhood and your teenage years, the more fat cells you will have as an adult. These fat cells then become \"fuller\" or \"thinner\" as you gain and lose weight as an adult. The set point is the trigger in these cells that will send a message to your brain saying that your fat cells are getting too thin and that you must eat more. Different people's fat cells will have different set points, and the strength of the message is affected by the number of cells. Thus a person with lots of fat cells and a high set point will battle with a strong desire for food when dieting.","sum":"The more _______ _______, the stronger the _______ _______ _______ when dieting","bogi":["a person has","becomes","fat cells","for food"],"answerSeq":["fat cells","a person has","__BLANK__","for food","becomes"],"hasBlank":true,"addWord":"desire","answer":"The more fat cells a person has, the stronger the desire for food becomes when dieting.","exp":"","acceptVariants":{}},"36":{"num":36,"title":"26년 3월 고1 36번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Initially the catchphrase \"less is more\" had a simple meaning. First mentioned in Robert Browning's poem \"Andrea del Sarto,\" it suggests that everything simple is better and more beautiful than the complex and tangled. Nowadays this phrase is heard often -- maybe even too often. But it's important to recognize that the way of thinking that lies behind these words slowly extinguishes certain habits from our daily life. For example, think about the heavy, massive radio receivers that existed back in the day. Over time, many of their buttons became viewed as \"extra\" and were removed, and with each reduction these devices eventually developed into the phones in our pockets. The scale of the object became smaller, and the functions of the buttons got lost in the three-dot menus and multilayered folders of our phones.","sum":"The \"less is more\" philosophy slowly _______ certain habits from our daily life, _______ _______ _______ _______","bogi":["their functions","the simple devices in our pockets","as everyday objects lost","and eventually developed into"],"answerSeq":["__BLANK__","as everyday objects lost","their functions","and eventually developed into","the simple devices in our pockets"],"hasBlank":true,"addWord":"extinguishes","answer":"The \"less is more\" philosophy slowly extinguishes certain habits from our daily life, as everyday objects lost their functions and eventually developed into the simple devices in our pockets.","exp":"[정답 근거] 본문 \"slowly extinguishes certain habits from our daily life\"에서 extinguishes(추가단어). 부사구 \"from our daily life\"는 added 직후 고정부 배치. \"these devices eventually developed into the phones in our pockets\" 복원.","acceptVariants":{}},"37":{"num":37,"title":"26년 3월 고1 37번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"We first need to understand the short but hidden history behind the plastics industry and how it became deeply rooted in our daily lives. Before plastic, people lived more sustainably, with far fewer waste problems than we face today. However, after the invention of plastic, its rapid adoption during World War II, and its explosion into consumer goods, plastic was everywhere. The growing industry came to symbolize the convenience and prosperity of the American dream. This dream came with a price. Over time, people began to notice the environmental impact, and the early seeds of today's environmental movement were planted. However, the plastics industry was quick to counter these concerns, launching campaigns that presented recycling as the solution to all our problems. They pushed the idea that pollution was the fault of consumers, not the corporations flooding the market with plastic.","sum":"The plastics industry _______ _______ _______ _______ _______ _______ _______ _______","bogi":["and blamed","presented","corporations","as the solution","pollution on","recycling","rather than"],"answerSeq":["presented","recycling","as the solution","and blamed","pollution on","__BLANK__","rather than","corporations"],"hasBlank":true,"addWord":"consumers","answer":"The plastics industry presented recycling as the solution and blamed pollution on consumers rather than corporations.","exp":"","acceptVariants":{}},"38":{"num":38,"title":"26년 3월 고1 38번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"As Kuhn proposed, our propositions about the world are embedded within paradigms, roughly a network of interrelated commitments to a particular theory, a conception of a subject matter, and methodological practices. Thus, when scientists undertake research, they do so from within a specific paradigm. Even the most exacting measurements are only sensible from within that paradigm. For example, a look into a microscope tells you nothing unless you are already informed about the nature of the instrument and what you are supposed to be looking at. Thus, what we call major progress in science is not a movement from a less to a more accurate paradigm. Rather, it is a horizontal shift from one 'way of seeing the world' to another. For Kuhn, 'the scientist with a new paradigm sees differently from the way he had seen before.'","sum":"_______ _______ _______ _______ _______ _______ _______.","bogi":["major progress in science","between paradigms","what","is a","we call","shift"],"answerSeq":["what","we call","major progress in science","is a","__BLANK__","shift","between paradigms"],"hasBlank":true,"addWord":"horizontal","answer":"What we call major progress in science is a horizontal shift between paradigms.","exp":"[정답 근거] 본문 과학의 진보는 패러다임 간 수평 이동. [핵심 구문] what 명사절 주어 (주어 위치라 통짜 부착 불가 → 변별 작동). [추가 단어] horizontal (본문 'horizontal shift' 동일어). transform 0개 (be동사문).","acceptVariants":{}},"39":{"num":39,"title":"26년 3월 고1 39번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Making two visits to one of our cold greenhouses --one at dawn after a below-zero night, and the other a few hours later-- provides a striking introduction to the winter harvest. During the dawn visit all the crops are frozen solid. Raising the inner covers, which is difficult because they too are frozen, reveals a sight of hard, frost-coated leaves bleak enough to convince anyone that this idea is foolish. Yet a few hours later, after the sun has warmed the greenhouses above freezing, the second visit presents a miraculous contrast. Under the inner covers are closely spaced rows of vigorous, healthy leaves that stretch the length of the greenhouse. The leaf colors in different shades of greens, reds, maroons, and yellows stand bright against the dark soil. It looks like a never-ending spring.","sum":"Although the crops _______ _______ at dawn, the warmed greenhouse _______ _______ _______ _______ _______","bogi":["solid","miraculous","later reveals","in a","are frozen","vigorous leaves"],"answerSeq":["are frozen","solid","later reveals","vigorous leaves","in a","miraculous","__BLANK__"],"hasBlank":true,"addWord":"contrast","answer":"Although the crops are frozen solid at dawn, the warmed greenhouse later reveals vigorous leaves in a miraculous contrast.","exp":"","acceptVariants":{}},"40":{"num":40,"title":"26년 3월 고1 40번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"Parenting experts say children need to learn independence and resilience. But cities and suburbs don't offer safe walk and bike routes to school, malls kick teenagers out on the weekends, and free time disappears under a spreadsheet of activities. All of those \"musts\" take more of the parents' time or money to navigate, because the child can't do it on their own. As Darby Saxbe, a clinical psychologist, recently wrote in the New York Times, \"underparenting requires structural change.\" Unlike most political experts, she's not just talking about economic policies like family leave and government-supported childcare. She's talking about actual physical structures, and the cultural change required to populate them. We need to \"build back our tolerance for children in public spaces,\" she writes, \"and create safe environments where lightly supervised kids can move around freely.\"","sum":"Children's independence _______ _______ _______, so experts _______ _______ _______ _______ _______","bogi":["structural","environments","economic policies","is limited","rather than","call for","by urban"],"answerSeq":["is limited","by urban","environments","call for","structural","__BLANK__","rather than","economic policies"],"hasBlank":true,"addWord":"change","answer":"Children's independence is limited by urban environments, so experts call for structural change rather than economic policies.","exp":"","acceptVariants":{}},"41":{"num":41,"title":"26년 3월 고1 41번","stem":"(A)글을 한 문장으로 요약할 때, <보기>의 어구를 모두 한 번씩 사용하고(필요시 어법에 맞게 형태를 바꿀 것) 의미상 필요한 한 단어를 원문에서 찾아 추가하여, (B)요약문을 완성하시오.","passage":"It's fair to say that patience has a terrible name. For one thing, the prospect of doing anything that you've been told will require patience simply seems unattractive. More specifically, though, it's disturbingly passive. It is the virtue that has traditionally been urged upon housewives, while their husbands led more exciting lives outside the home; or on racial minorities, told to wait just a few more decades for their full civil rights. The talented but self-effacing employee who 'waits patiently' for a promotion, we tend to feel, will be waiting a long time: she ought to be trumpeting her achievements instead. In all such cases, patience is a way of psychologically accommodating yourself to a lack of power, an attitude intended to help you to resign yourself to your lowly position, in theoretical hopes of better days to come. But as society accelerates, something shifts. In more and more contexts, patience becomes a form of power. In a world geared for hurry, the capacity to resist the urge to hurry -- to allow things to take the time they take -- is a way to gain purchase on the world, to do the work that counts, and to derive satisfaction from the doing itself, instead of putting off all your fulfillment to the future.","sum":"Although _______ _______ _______ _______ to a lack of power, it _______ _______ _______ as society accelerates","bogi":["seen as","a form of","patience","passive accommodation","was traditionally","becomes"],"answerSeq":["patience","was traditionally","seen as","passive accommodation","becomes","a form of","__BLANK__"],"hasBlank":true,"addWord":"power","answer":"Although patience was traditionally seen as passive accommodation to a lack of power, it becomes a form of power as society accelerates.","exp":"","acceptVariants":{}}}};
+  let D=null, slots=[], bank=[], graded=false, blankWord='', curKey=null;
+  let dragData=null, ghost=null;
+
+function init(){
+  D=DATA.passages[curKey];
+  // sum 분해 → 슬롯 앞 고정텍스트
+  const parts=D.sum.split(/(_{3,})/);
+  const slotMeta=[]; let buf='';
+  for(const p of parts){ if(/^_{3,}$/.test(p)){slotMeta.push(buf);buf='';} else buf+=p; }
+  slots = D.answerSeq.map((_,i)=>({idx:i,type:'drop',fixedBefore:slotMeta[i]||'',placed:null,locked:false}));
+  // 뱅크: 보기 청크 + (hasBlank면) 점선 입력 청크 1개, 섞기
+  const items = D.bogi.map(t=>({kind:'chunk',text:t}));
+  if(D.hasBlank) items.push({kind:'input'});
+  bank = shuffle(items);
+  blankWord='';
+  graded=false;
+  render();
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function render(){
+  let h='';
+  h+=`<div class="card"><span class="back-link" onclick="P3.back()">← 지문 목록</span>
+    <div class="set-title">${esc(D.title)}</div>
+    <div class="set-meta">${esc(D.topic)}</div></div>`;
+
+  // 지문(A)
+  h+=`<div class="card"><div class="zone-lbl">지문 (A)</div>
+    <div class="passage"><span class="pg-lbl">PASSAGE</span>${esc(D.passage)}</div></div>`;
+
+  // 문제
+  h+=`<div class="card">
+    <div class="topbar"><span class="q-num">서술형 · 요약문 완성</span><span class="q-mode">Phase III</span></div>
+    <div class="phase-info"><b>${esc(D.stem)}</b></div>
+    <div class="hint-method">보기 어구를 끌어다 빈칸에 순서대로 놓으세요. 점선(✎) 칸엔 원문에서 찾은 한 단어를 입력한 뒤, 그 단어도 끌어다 놓으면 됩니다.</div>
+
+    <div class="zone-lbl">요약문 (B)</div>
+    <div class="sum-box" id="sumBox">${renderSum()}</div>
+
+    <div class="zone-lbl">보기 어구</div>
+    <div class="bank-zone" id="bank">${renderBank()}</div>
+
+    <div id="fb"></div>
+    <div id="ctrl"></div>
+  </div>`;
+  document.getElementById('app').innerHTML=h;
+
+  bindBank(); bindSlots(); bindInput();
+  renderCtrl();
+}
+
+function renderSum(){
+  let h='';
+  slots.forEach((s,i)=>{
+    if(s.fixedBefore) h+=`<span>${esc(s.fixedBefore)}</span>`;
+    if(s.placed){
+      const isBlank = s.placed.kind==='word';
+      let cls='filled'+(isBlank?' isblank':'');
+      if(s.locked) cls+=' ok locked';                 // 맞아서 잠긴 칸
+      else if(graded) cls+=(isPlacedCorrect(i)?' ok':' no');
+      const drag = s.locked ? '' : 'draggable="true" data-act="remove"';
+      h+=`<span class="slot ${cls}" data-slot="${i}" ${drag}>${esc(s.placed.text)}</span>`;
+    } else {
+      h+=`<span class="slot empty" data-slot="${i}"></span>`;
+    }
+  });
+  return h;
+}
+
+function renderBank(){
+  if(bank.length===0) return `<span class="bank-empty">보기를 모두 배치했어요</span>`;
+  return bank.map((it,i)=>{
+    if(it.kind==='input'){
+      const hw = blankWord.trim()!=='' ? ' has-word' : '';
+      return `<span class="ck ck-input${hw}" data-bank="${i}"><input id="blankIn" type="text"
+        autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
+        placeholder="원문에서 한 단어" value="${esc(blankWord)}"></span>`;
+    }
+    const wc = it.kind==='word'?'ck-word':'ck-bank';
+    return `<span class="ck ${wc}" draggable="true" data-bank="${i}">${esc(it.text)}</span>`;
+  }).join('');
+}
+
+function renderCtrl(){
+  const ctrl=document.getElementById('ctrl');
+  if(graded){
+    const ok=isAllCorrect();
+    if(ok){
+      ctrl.innerHTML=`<button class="btn bGreen" onclick="P3.resetAll()">✓ 정답! 처음부터 다시 풀기</button>`;
+    } else {
+      ctrl.innerHTML=`<button class="btn bn" onclick="P3.reviseWrong()">틀린 곳만 고치기</button>
+        <button class="btn bGray" onclick="P3.resetAll()">처음부터 다시</button>`;
+    }
+    return;
+  }
+  // 풀이/수정 중: 빈 슬롯(잠기지 않은)이 모두 채워지면 채점 가능
+  const ready = slots.every(s=> s.locked || s.placed!==null );
+  ctrl.innerHTML=`<button class="btn bn" id="checkBtn" onclick="P3.checkAnswer()" ${ready?'':'disabled'}>채점하기</button>
+    <button class="btn bGray" onclick="P3.resetAll()">처음부터 다시</button>`;
+}
+
+/* ===== 채점 ===== */
+function isPlacedCorrect(i){
+  const want=D.answerSeq[i], got=slots[i].placed;
+  if(!got) return false;
+  if(want==='__BLANK__') return got.kind==='word' && norm(got.text)===norm(D.addWord);
+  if(got.kind!=='chunk') return false;
+  if(got.text===want) return true;
+  // 어법 변형 인정(acceptVariants): 보기 원형이 want인데, 정답에서 변형형도 허용
+  const av=D.acceptVariants&&D.acceptVariants[want];
+  if(av && av.some(v=>norm(v)===norm(got.text))) return true;
+  return false;
+}
+function norm(s){return (s||'').trim().toLowerCase();}
+function isAllCorrect(){ return slots.every((_,i)=>isPlacedCorrect(i)); }
+
+function checkAnswer(){
+  graded=true; render();
+  const fb=document.getElementById('fb');
+  if(isAllCorrect()){
+    fb.innerHTML=`<div class="feedback fb-ok">정답입니다! 🎉 순서와 추가 단어 모두 정확해요.
+      <div class="ans-line">${esc(D.answer)}</div></div>`;
+  } else {
+    const nWrong = slots.filter((_,i)=>!isPlacedCorrect(i)).length;
+    let msg=`<div class="feedback fb-no">${nWrong}곳이 틀렸어요. <b>틀린 곳만 고치기</b>를 누르면 맞은 칸은 그대로 두고 빨간 칸만 다시 배열할 수 있어요.</div>`;
+    if(D.exp) msg+=`<div class="expl">${esc(D.exp)}</div>`;
+    fb.innerHTML=msg;
+  }
+}
+
+// 맞은 칸은 잠그고, 틀린 칸의 청크/단어만 뱅크로 회수해 재배열
+function reviseWrong(){
+  slots.forEach((s,i)=>{
+    if(isPlacedCorrect(i)){
+      s.locked=true;                       // 맞은 칸 고정
+    } else if(s.placed){
+      // 틀린 칸 → 뱅크로 회수. 입력단어(word)는 기존 값 보존해 입력칸 복원.
+      returnToBank(s.placed);
+      s.placed=null;
+    }
+  });
+  graded=false;          // 다시 풀이 모드(잠긴 칸은 그대로 초록)
+  render();
+  // 단어가 회수돼 입력칸이 생겼으면 포커스+전체선택 → 바로 고치게
+  const bi=document.getElementById('blankIn');
+  if(bi){ bi.focus(); bi.select(); }
+}
+
+function resetAll(){ init(); }
+
+/* ===== 입력 청크 타이핑 ===== */
+function bindInput(){
+  const el=document.getElementById('blankIn');
+  if(!el) return;
+  el.addEventListener('input',e=>{
+    blankWord=e.target.value;
+    // 리렌더 없이 상태만 반영(입력 끊김 방지). 입력칸이 곧 드래그 가능한 청크 역할을 겸함.
+    const wrap=el.closest('.ck-input');
+    if(wrap) wrap.classList.toggle('has-word', blankWord.trim()!=='');
+    renderCtrl();
+  });
+  el.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){ e.preventDefault();
+      placeInputWord();
+    }
+  });
+}
+function findBankKind(k){ return bank.findIndex(b=>b.kind===k); }
+// 입력칸의 단어를 첫 빈 슬롯에 배치(엔터 또는 입력칸 드래그/탭 시 공통 사용)
+function placeInputWord(targetSlotIdx){
+  if(blankWord.trim()==='') return false;
+  const i=findBankKind('input'); if(i<0) return false;
+  const target = (targetSlotIdx!=null) ? slots[targetSlotIdx] : slots.find(s=>!s.locked && s.placed===null);
+  if(!target || target.locked || target.placed!==null) return false;
+  bank[i]={kind:'word',text:blankWord.trim()};
+  target.placed=bank[i]; bank.splice(i,1); render(); return true;
+}
+
+/* ===== 슬롯 클릭 제거 ===== */
+function bindSlots(){
+  document.querySelectorAll('.slot.filled[data-act="remove"]').forEach(el=>{
+    const i=+el.dataset.slot;
+    // 클릭 → 뱅크로 회수
+    el.addEventListener('click',()=>{
+      if(graded) return;
+      const s=slots[i];
+      if(s.placed){ returnToBank(s.placed); s.placed=null; render(); }
+    });
+    // 드래그 소스(슬롯)
+    el.addEventListener('dragstart',e=>{
+      dragData={src:'slot',slotIdx:i};
+      el.classList.add('dragging'); e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain', slots[i].placed?.text||'');
+    });
+    el.addEventListener('dragend',()=>{el.classList.remove('dragging');clearDragOver();dragData=null;});
+    // 드롭 타깃(채워진 슬롯) → 삽입+밀어내기
+    el.addEventListener('dragover',e=>{ if(slots[i].locked) return; e.preventDefault();
+      if(dragData && dragData.src==='slot'){
+        // 마우스 좌우 위치로 삽입 막대기 표시
+        const r=el.getBoundingClientRect();
+        const before = (e.clientX < r.left + r.width/2);
+        el.classList.toggle('insert-before', before);
+        el.classList.toggle('insert-after', !before);
+      } else {
+        el.classList.add('drag-over');
+      }
+    });
+    el.addEventListener('dragleave',()=>{el.classList.remove('drag-over','insert-before','insert-after');});
+    el.addEventListener('drop',e=>{ if(slots[i].locked) return; e.preventDefault();
+      el.classList.remove('drag-over','insert-before','insert-after'); handleDropOnSlot(i); });
+    el.addEventListener('pointerdown',startPointerDrag);
+  });
+}
+
+// 청크/단어를 뱅크로 되돌리기 (word는 입력칸 복원, 기존 입력값 보존)
+function returnToBank(item){
+  if(item.kind==='word'){
+    blankWord=item.text||'';            // 기존 단어 보존 → 입력칸에 그대로 복원
+    if(bank.findIndex(b=>b.kind==='input')<0) bank.push({kind:'input'});
+  } else {
+    bank.push(item);
+  }
+}
+
+/* ===== 드래그/탭 ===== */
+
+// 어떤 소스든 슬롯 i에 드롭됐을 때 처리(빈칸=이동/배치, 채워짐=스왑)
+function handleDropOnSlot(i){
+  if(!dragData) return;
+  const target=slots[i]; if(target.locked) return;
+  // 소스에서 아이템 확보
+  let item=null;
+  if(dragData.src==='bank'){ item=bank[dragData.bankIdx]; }
+  else if(dragData.src==='input'){ if(blankWord.trim()==='')return; item={kind:'word',text:blankWord.trim()}; }
+  else if(dragData.src==='slot'){ item=slots[dragData.slotIdx].placed; }
+  if(!item) return;
+
+  if(dragData.src==='slot'){
+    const from=slots[dragData.slotIdx];
+    if(from===target) return;
+    insertSlot(dragData.slotIdx, i);     // 삽입+밀어내기
+  } else if(dragData.src==='bank'){
+    if(target.placed){ returnToBank(target.placed); } // 기존 것 회수 후 교체
+    target.placed=item; bank.splice(dragData.bankIdx,1);
+  } else if(dragData.src==='input'){
+    if(target.placed){ returnToBank(target.placed); }
+    const ii=bank.findIndex(b=>b.kind==='input');
+    if(ii>-1){ bank[ii]={kind:'word',text:item.text}; target.placed=bank[ii]; bank.splice(ii,1); }
+  }
+  render();
+}
+
+// 삽입+밀어내기: fromIdx의 청크를 toIdx 자리에 끼워넣고 사이 청크들을 한 칸씩 민다.
+// 잠긴 칸은 위치 고정(이동 대상에서 제외). 채워진 청크들의 "순서"만 재배열.
+function insertSlot(fromIdx, toIdx){
+  // 이동 가능한(잠기지 않은) 슬롯 인덱스 목록
+  const movable = slots.map((s,idx)=>idx).filter(idx=>!slots[idx].locked);
+  // 현재 movable 슬롯들의 placed 값(빈칸은 null) 순서
+  const seq = movable.map(idx=>slots[idx].placed);
+  // from/to를 movable 기준 위치로 변환
+  const fp = movable.indexOf(fromIdx);
+  const tp = movable.indexOf(toIdx);
+  if(fp<0||tp<0) return;
+  // fp 항목을 빼서 tp 위치에 삽입
+  const [moved]=seq.splice(fp,1);
+  seq.splice(tp,0,moved);
+  // 재배치: movable 슬롯들에 새 순서대로 다시 채움
+  movable.forEach((idx,k)=> slots[idx].placed = seq[k]);
+}
+
+// 뱅크 영역에 드롭 → 슬롯의 청크 회수
+function handleDropOnBank(){
+  if(!dragData || dragData.src!=='slot') return;
+  const from=slots[dragData.slotIdx];
+  if(from.placed && !from.locked){ returnToBank(from.placed); from.placed=null; render(); }
+}
+
+function bindBank(){
+  const bankZone=document.getElementById('bank');
+  bankZone.addEventListener('dragover',e=>{ if(dragData&&dragData.src==='slot'){e.preventDefault();bankZone.classList.add('drag-over');} });
+  bankZone.addEventListener('dragleave',e=>{ if(e.target===bankZone) bankZone.classList.remove('drag-over'); });
+  bankZone.addEventListener('drop',e=>{ e.preventDefault(); bankZone.classList.remove('drag-over'); handleDropOnBank(); });
+
+  document.querySelectorAll('#bank .ck[draggable="true"]').forEach(el=>{
+    el.addEventListener('dragstart',e=>{
+      dragData={src:'bank',bankIdx:+el.dataset.bank};
+      el.classList.add('dragging'); e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain', bank[+el.dataset.bank].text||'');
+    });
+    el.addEventListener('dragend',()=>{el.classList.remove('dragging');clearDragOver();dragData=null;});
+    el.addEventListener('click',()=>{ // 모바일 탭 → 첫 빈 슬롯
+      if(graded) return;
+      const idx=+el.dataset.bank; const target=slots.find(s=>!s.locked && s.placed===null);
+      if(target){ target.placed=bank[idx]; bank.splice(idx,1); render(); }
+    });
+    el.addEventListener('pointerdown',startPointerDrag);
+  });
+  // 입력칸: 단어가 입력돼 있으면 탭/드래그 손잡이(✎)로 슬롯 배치
+  const inWrap=document.querySelector('#bank .ck-input');
+  if(inWrap){
+    inWrap.addEventListener('click',e=>{
+      if(e.target.tagName==='INPUT') return;
+      if(graded) return;
+      placeInputWord();
+    });
+    inWrap.setAttribute('draggable','true');
+    inWrap.addEventListener('dragstart',e=>{
+      if(blankWord.trim()===''){ e.preventDefault(); return; }
+      dragData={src:'input'};
+      e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',blankWord.trim());
+    });
+    inWrap.addEventListener('dragend',()=>{clearDragOver();dragData=null;});
+  }
+  // 빈 슬롯 드롭 타깃
+  document.querySelectorAll('.slot.empty').forEach(slotEl=>{
+    slotEl.addEventListener('dragover',e=>{e.preventDefault();slotEl.classList.add('drag-over');});
+    slotEl.addEventListener('dragleave',()=>slotEl.classList.remove('drag-over'));
+    slotEl.addEventListener('drop',e=>{e.preventDefault();slotEl.classList.remove('drag-over');
+      handleDropOnSlot(+slotEl.dataset.slot);
+    });
+  });
+}
+function placeInSlot(slotIdx,bankIdx){
+  const s=slots[slotIdx]; if(s.locked||s.placed!==null) return;
+  s.placed=bank[bankIdx]; bank.splice(bankIdx,1); render();
+}
+function clearDragOver(){document.querySelectorAll('.drag-over,.insert-before,.insert-after').forEach(e=>e.classList.remove('drag-over','insert-before','insert-after'));}
+function startPointerDrag(e){
+  if(e.pointerType==='mouse') return;
+  if(graded && !e.currentTarget.classList.contains('slot')) return;
+  if(graded) return;
+  const el=e.currentTarget;
+  // 소스 판별: 뱅크 청크 / 슬롯
+  if(el.classList.contains('slot')){
+    if(el.classList.contains('locked')) return;
+    dragData={src:'slot',slotIdx:+el.dataset.slot};
+  } else {
+    dragData={src:'bank',bankIdx:+el.dataset.bank};
+  }
+  const text = el.textContent.trim() || (bank[dragData.bankIdx]?.text)||'';
+  e.preventDefault();
+  ghost=document.createElement('div');ghost.id='drag-ghost';ghost.textContent=text;document.body.appendChild(ghost);moveGhost(e);
+  el.classList.add('dragging'); let cur=null;
+  function mv(ev){ moveGhost(ev); const t=document.elementFromPoint(ev.clientX,ev.clientY);
+    const se=t&&t.closest?t.closest('.slot'):null;
+    const drop = (se && !se.classList.contains('locked')) ? se : null;
+    if(cur&&cur!==drop)cur.classList.remove('drag-over'); if(drop){drop.classList.add('drag-over');cur=drop;} else cur=null; }
+  function up(ev){ document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);
+    if(ghost){ghost.remove();ghost=null;} el.classList.remove('dragging');
+    const t=document.elementFromPoint(ev.clientX,ev.clientY);
+    const se=t&&t.closest?t.closest('.slot'):null;
+    if(se && !se.classList.contains('locked')) handleDropOnSlot(+se.dataset.slot);
+    else { // 뱅크 영역에 드롭하면 회수(슬롯 소스만)
+      const bz=t&&t.closest?t.closest('#bank'):null;
+      if(bz) handleDropOnBank();
+    }
+    if(cur)cur.classList.remove('drag-over'); dragData=null;
+  }
+  document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);
+}
+function moveGhost(e){if(ghost){ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';}}
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+  function has(pid){ const k=DATA.map[pid]; return !!(k && DATA.passages[k]); }
+  function open(pid){ const k=DATA.map[pid]; if(!k||!DATA.passages[k])return false; curKey=k; init(); return true; }
+  function back(){ if(typeof onBackToPhase==='function') onBackToPhase(); }
+  return { has:has, open:open, checkAnswer:checkAnswer, resetAll:resetAll, reviseWrong:reviseWrong, back:back };
+})();
+
+/* Phase III 화면 연동 */
+function onBackToPhase(){ S.screen='phase'; R(); }
+function vPhase3(){ setTimeout(()=>{ P3.open(S.pid); },0); return '<div class="card muted">서술형 문제를 불러오는 중...</div>'; }
+
 </script>
 </body>
 </html>
