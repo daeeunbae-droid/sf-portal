@@ -205,6 +205,14 @@ function vPhase(){
   return h;
 }
 function goHome(){S.screen='home';S.pid=null;R();}
+// 형제 지문 이동: 본체 passages 순서에서 dir(+1/-1) 방향의 Phase III 보유 지문 pid. 끝이면 null.
+function siblingPid(pid,dir){
+  const arr=DATA.passages.filter(p=>(typeof P3!=='undefined'&&P3.has)?P3.has(p.id):true);
+  const i=arr.findIndex(p=>p.id===pid);
+  if(i<0)return null;
+  const j=i+dir;
+  return (j>=0&&j<arr.length)?arr[j].id:null;
+}
 function startPhase(ph){S.phase=ph;S.qi=0;S.results=[];S.resumeData=null;checkResume(ph);}
 function checkResume(ph){
   // 미완료 진행 기록이 있으면 이어하기 물어보기
@@ -547,7 +555,16 @@ function renderCtrl(){
   if(graded){
     const ok=isAllCorrect();
     if(ok){
-      ctrl.innerHTML=`<button class="btn bGreen" onclick="P3.resetAll()">✓ 정답! 처음부터 다시 풀기</button>`;
+      const prevPid=(typeof siblingPid==='function')?siblingPid(curPid,-1):null;
+      const nextPid=(typeof siblingPid==='function')?siblingPid(curPid,1):null;
+      const prevBtn=prevPid
+        ? `<button class="btn bGray" onclick="selPassage('${prevPid}')">◀ 이전 번호</button>`
+        : `<button class="btn bGray" disabled style="opacity:.4">◀ 이전 번호</button>`;
+      const nextBtn=nextPid
+        ? `<button class="btn bGray" onclick="selPassage('${nextPid}')">다음 번호 ▶</button>`
+        : `<button class="btn bGray" disabled style="opacity:.4">다음 번호 ▶</button>`;
+      ctrl.innerHTML=`<button class="btn bGreen" onclick="P3.resetAll()">✓ 정답! 처음부터 다시 풀기</button>
+        <div style="display:flex;gap:8px;margin-top:8px">${prevBtn}${nextBtn}</div>`;
     } else {
       ctrl.innerHTML=`<button class="btn bn" onclick="P3.reviseWrong()">틀린 곳만 고치기</button>
         <button class="btn bGray" onclick="P3.resetAll()">처음부터 다시</button>`;
