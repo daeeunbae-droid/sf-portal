@@ -1,0 +1,13 @@
+{
+  "name": "sfp012-verify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SFP-012 회귀 테스트 — SF_Word_Test_20.html (고등단어장 어원편 소스 추가) jsdom 검증",
+  "scripts": {
+    "test": "node verify.js"
+  },
+  "dependencies": {
+    "jsdom": "^26.0.0",
+    "xlsx": "^0.18.5"
+  }
+}
