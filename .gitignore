@@ -17,3 +17,12 @@ node_modules/
 # 단어책 원본 엑셀 — 저장소는 공개(public)라 커밋 금지. 로컬에만 둔다.
 # 변환 결과(단어+뜻)는 앱 HTML에 들어가지만 원본 파일은 올리지 않는다(파일명 자체가 상품명).
 *.xlsx
+
+# Claude Code 로컬 개인 설정 — 이 PC 전용 권한 허용목록. 공유 대상 아님.
+# (공유가 필요한 설정은 .claude/settings.json 으로 따로 둔다.)
+.claude/settings.local.json
+
+# 서술형 Anatomy 검수기 — SFC(교재) 라인 자산. 이 저장소 소관 밖.
+# items/unit*.json 은 판매 예정 교재의 문항 원본이다. 저장소가 공개(public)라
+# 커밋하면 상품이 통째로 노출된다. 별도 비공개 보관처로 옮길 때까지 로컬에만 둔다.
+_tools/anatomy/
