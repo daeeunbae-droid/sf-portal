@@ -23,7 +23,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | 표면 | 확인 방법 | 지금 |
 |---|---|---|
 | 코드 | `git log` · `state.py` | 검사됨 |
-| 원격 | `python3 _tools/state/state.py --fetch` | 미push 있음 — **건수·해시는 검사기 출력 참조**(여기 적으면 커밋하는 순간 틀린다) |
+| 원격 | `python3 _tools/state/state.py --fetch` | 동기화됨 — 2026-08-29 `git push origin main` (Windows) |
 | 배포(Pages) | 라이브 URL 실제 접속 | 2026-08-26 확인 — 전 경로 200 |
 | Firebase | 실기기만. `verify.js`는 `memStore`로 떼고 돌림 | **미확인** |
 
@@ -59,7 +59,6 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 | # | 내용 | 누구 |
 |---|---|---|
-| B | 원격 미push 해소 — 데스크탑 Linux VM 에 자격증명 없음. Windows 쪽에서 `git push origin main` | 대은 |
 | A | 구버전 처리 — 권고 A-2(19 남기고 `15_2·16·17` 삭제) | 승인 |
 | C | `_tools/anatomy/` 비공개 백업처 — gitignore는 백업이 아니다 | 대은 |
 | D | 단어 데이터 공개 범위 | 대은 |
