@@ -6,6 +6,8 @@ SF English 학습 포털. **공개(public) 저장소**의 GitHub Pages 정적 �
 ## 세션 시작 — 이 순서로
 
 1. **`python3 _tools/state/state.py`** — 먼저 돌린다. FAIL·WARN 이면 **그것부터 닫는다.** 새 작업을 얹지 않는다.
+   *(Windows 는 `python`, Cowork Linux VM 은 `python3`. 없으면 `winget install Python.Python.3.12` —
+   표준 라이브러리만 쓰므로 설치 외에 준비할 것은 없다. 파이썬이 아예 안 되면 Node 로 포팅 가능하다.)*
    이 검사기는 **기계적으로 관측 가능한 일부 미종료 신호만** 잡는다 —
    STATE 가 코드보다 뒤처졌는가, 커밋 안 된 작업이 있는가, 선언한 값이 실물과 같은가.
    **결정로그·작업대장 누락은 못 본다.** PASS 가 "제대로 닫혔다"는 뜻이 아니다.
