@@ -23,7 +23,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | 표면 | 확인 방법 | 지금 |
 |---|---|---|
 | 코드 | `git log` · `state.py` | 검사됨 |
-| 원격 | `python3 _tools/state/state.py --fetch` | 동기화됨 — 2026-08-29 `git push origin main` (Windows) |
+| 원격 | `python3 _tools/state/state.py --fetch` | **검사기 출력 참조** — 최초 동기화 2026-08-29 |
 | 배포(Pages) | 라이브 URL 실제 접속 | 2026-08-26 확인 — 전 경로 200 |
 | Firebase | 실기기만. `verify.js`는 `memStore`로 떼고 돌림 | **미확인** |
 
