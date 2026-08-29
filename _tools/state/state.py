@@ -207,14 +207,21 @@ def main():
 
     # ── 3. 원격 — 알림일 뿐, 막지 않는다 ───────────────────────────
     # 종료 조건은 "커밋 해시 확보"까지다. push 는 종료 조건이 아니다.
+    fetched = False
     if args.fetch:
-        git(repo, "fetch", "--quiet")
+        # fetch 실패를 성공처럼 취급하면, 옛 remote-tracking ref 로 비교하면서
+        # "방금 확인했다"는 인상까지 준다. 반드시 결과를 구분한다.
+        if git(repo, "fetch", "--quiet") is None:
+            r.add(NOTE, "git fetch 실패",
+                  "원격 최신 상태 미확인 — 기존 remote-tracking ref 로만 비교한다")
+        else:
+            fetched = True
     upstream = git(repo, "rev-parse", "--abbrev-ref", "@{u}")
     if not upstream:
         r.add(SKIP, "원격", "upstream 없음")
     else:
         counts = git(repo, "rev-list", "--left-right", "--count", f"{upstream}...HEAD")
-        stamp = "" if args.fetch else " (remote-tracking ref — 마지막 fetch 시점)"
+        stamp = " (방금 fetch)" if fetched else " (remote-tracking ref — 마지막 성공 fetch 시점)"
         if counts is None:
             r.add(SKIP, "원격", "비교 실패")
         else:
