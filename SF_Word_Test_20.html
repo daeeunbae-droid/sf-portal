@@ -1919,6 +1919,8 @@ function enterVoca3000(m){
   const mt=document.getElementById('modeTab'); if(mt) mt.style.display='none';
   const sub=document.getElementById('selSub');
   if(sub) sub.textContent = (S.mode==='study') ? 'Voca 3000 · 익히기' : 'Voca 3000 · 확인하기';
+  // [SFP-015] 페이지 목록을 바로 펼쳐준다 — 드롭다운을 다시 고르지 않아도 되게 (enterNyVoca와 동일 패턴)
+  up2restore();
 }
 // [SFP-012] 고등단어장 어원편 모드 확정 → 소스2(#app) 엔진으로 브리지
 // enterVoca3000의 복제. 1차 오픈에서는 'review'(오답 다시 풀기)를 받지 않는다 —

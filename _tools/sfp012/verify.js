@@ -131,8 +131,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   C.d.querySelector('.vs-mode-card[data-mode="test"]').onclick(); await sleep(30);
   ok('S.b2=Voca 3000', C.w.eval("S").b2 === 'Voca 3000', C.w.eval("S").b2);
   ok('selSub Voca 3000 · 확인하기', txt(C.d.getElementById('selSub')) === 'Voca 3000 · 확인하기', txt(C.d.getElementById('selSub')));
-  // 19와 동일하게 드롭다운으로 페이지 목록 펼치기
-  C.d.getElementById('s2b').value = 'Voca 3000'; C.w.up2();
+  // [SFP-015] 페이지 목록이 드롭다운 재조작 없이 처음부터 펼쳐져야 한다(초기 숨김 버그 수정)
+  ok('페이지 목록 초기 노출(드롭다운 재조작 불필요)', vis(C.d.getElementById('s2ps')));
   const p = [...C.d.querySelectorAll('#s2ps .pgBtn')].map(txt);
   ok('p1~p148 그대로', p.length === 148 && p[0] === 'p1' && p[147] === 'p148', [p.length, p[0], p[147]]);
   [...C.d.querySelectorAll('#s2ps .pgBtn')].find(b => txt(b) === 'p1').onclick();
