@@ -4,7 +4,7 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-08-29 (SFP-014) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-08-29 (SFP-015) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
@@ -46,12 +46,11 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 없음** · **다음 바퀴 = Voca 3000 페이지 목록 초기 숨김 버그**(아래 Ready 첫 줄)
+**Active (≤1): 없음** · **다음 바퀴 = 관리자 화면 Phase III 가시화**(아래 Ready 첫 줄)
 
 | 상태 | 항목 |
 |---|---|
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
-| Ready | Voca 3000 페이지 목록 초기 숨김 — `enterVoca3000()`에 `up2restore()` 한 줄 |
 | Ready | 관리자 화면 Phase III 가시화 [SFP-010 1순위] · 38번 Phase I/II 제작 |
 | Urgent | 없음 |
 
@@ -60,6 +59,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | # | 내용 | 누구 |
 |---|---|---|
 | A | 구버전 처리 — 권고 A-2(19 남기고 `15_2·16·17` 삭제) | 승인 |
+| B | Voca 3000 페이지 목록 초기 숨김 수정(SFP-015, 커밋 `f17b824`) — jsdom 60/60 PASS. 실기기 화면 확인 + push 대기 | 대은 |
 | C | `_tools/anatomy/` 비공개 백업처 — gitignore는 백업이 아니다 | 대은 |
 | D | 단어 데이터 공개 범위 | 대은 |
 | E | `verify.js`를 실제 gate에 연결(pre-commit) — 지금은 실행하라는 문장뿐 | 대기 |
