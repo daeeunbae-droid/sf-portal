@@ -59,7 +59,6 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | # | 내용 | 누구 |
 |---|---|---|
 | A | 구버전 처리 — 권고 A-2(19 남기고 `15_2·16·17` 삭제) | 승인 |
-| B | Voca 3000 페이지 목록 초기 숨김 수정(SFP-015, 커밋 `f17b824`) — jsdom 60/60 PASS · push 완료(`fab40c4`, origin과 동기화). **실기기 화면 확인만 남음**(커밋≠배포 — 라이브에서 직접 열어 확인) | 대은 |
 | C | `_tools/anatomy/` 비공개 백업처 — gitignore는 백업이 아니다 | 대은 |
 | D | 단어 데이터 공개 범위 | 대은 |
 | E | `verify.js`를 실제 gate에 연결(pre-commit) — 지금은 실행하라는 문장뿐 | 대기 |
