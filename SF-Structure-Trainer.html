@@ -374,7 +374,7 @@ function vAdmin(){
       const inProg=progRecs.length;
       const allDates=[...recs.map(r=>r.date),...progRecs.map(r=>r.date)];
       const last=allDates.reduce((mx,d)=>d>mx?d:mx,'');
-      const avgPct=cnt?Math.round(recs.reduce((s,r)=>s+(r.pct||0),0)/cnt):0;
+      const avgPct=cnt?Math.round(recs.reduce((s,r)=>s+((r.pct!=null?r.pct:r.firstPct)||0),0)/cnt):0;
       return {nk,nm,cnt,inProg,last,avgPct};
     }).sort((a,b)=>b.last.localeCompare(a.last));
     stuSummary.forEach(s=>{
@@ -409,10 +409,12 @@ function adminStudent(nk){
     window.__stuRecs=all;
     let h='<div class="card"><table class="tbl"><tr><th>지문</th><th>단계</th><th>정답</th><th>진행</th><th>날짜</th></tr>';
     all.forEach((r,i)=>{
-      const col=r.pct>=80?'#16a34a':r.pct>=60?'#E8A010':'#dc2626';
+      const pctVal=(r.pct!=null?r.pct:r.firstPct)||0;
+      const col=pctVal>=80?'#16a34a':pctVal>=60?'#E8A010':'#dc2626';
       const dt=new Date(r.date).toLocaleDateString('ko-KR',{month:'short',day:'numeric'})+' '+new Date(r.date).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
       const doneTxt=r._done?'<span style="color:#16a34a;font-weight:700">완료</span>':`<span style="color:#E8A010;font-weight:700">진행중 ${r.nextQi||r.correct}/${r.total}</span>`;
-      const cntDisp=r._done?`${r.correct}/${r.total} (${r.pct}%)`:`${r.correct}/${(r.results||[]).length||0}`;
+      const correctVal=r.correct!=null?r.correct:r.firstCorrect;
+      const cntDisp=r._done?`${correctVal}/${r.total} (${pctVal}%)`:`${r.correct}/${(r.results||[]).length||0}`;
       h+=`<tr style="cursor:pointer" onclick="adminDetail(${i})"><td>${esc(r.passageTitle)}</td><td>Phase ${r.phase}</td><td style="color:${col};font-weight:700">${cntDisp}</td><td>${doneTxt}</td><td class="muted">${dt}</td></tr>`;
     });
     h+='</table><div class="muted" style="margin-top:8px">행을 누르면 문장별 상세를 볼 수 있어요</div></div>';
@@ -423,7 +425,21 @@ function adminDetail(i){
   const r=(window.__stuRecs||[])[i];if(!r)return;
   const p=DATA.passages.find(x=>x.id===r.passageId);
   const det=r.detail||r.results||[];
-  let h=`<div class="card"><span class="back-link" onclick="adminStudent('${sKey(r.name)}')">← 기록 목록</span>
+  const backBtn=`<span class="back-link" onclick="adminStudent('${sKey(r.name)}')">← 기록 목록</span>`;
+  if(!det.length && r.total!=null){
+    // Phase III(요약문 완성): 문장(청크) 단위 기록이 없음 — 첫 시도 정답률 요약만 표시
+    const pct=r.firstPct!=null?r.firstPct:0;
+    const col=pct>=80?'#16a34a':pct>=60?'#E8A010':'#dc2626';
+    const h=`<div class="card">${backBtn}
+      <h2 class="sec">${esc(r.passageTitle)} · Phase ${r.phase}</h2>
+      <div class="muted" style="margin-bottom:10px">${r._done?'완료':'진행중'} · ${esc(r.name)}</div>
+      <div class="pill" style="background:${col}22;color:${col}">첫 시도 정답률 ${pct}% (${r.firstCorrect}/${r.total})</div>
+      <div class="muted" style="margin-top:10px">요약문 전체 완성 여부만 기록됩니다 — 문장(청크) 단위 상세는 이 단계에서 저장되지 않습니다.</div>
+    </div>`;
+    $('app').innerHTML=h;
+    return;
+  }
+  let h=`<div class="card">${backBtn}
     <h2 class="sec">${esc(r.passageTitle)} · Phase ${r.phase}</h2>
     <div class="muted" style="margin-bottom:10px">${r._done?'완료':'진행중'} · ${esc(r.name)}</div>
     <table class="tbl"><tr><th>문장</th><th>결과</th><th>시도</th></tr>`;

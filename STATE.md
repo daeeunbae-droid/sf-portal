@@ -4,7 +4,7 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-08-29 (SFP-015) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-08-31 (SFP-016) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
@@ -43,15 +43,16 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 - `WB["Voca 3000"]` md5 · `.nojekyll` [#SFP-013-4] — 검사기가 대조
 - `RL` · `VOCA_SENTENCE_DATA` · `rAdmin` · Firebase `voca_sentence/*` · `voca3000/…/wrong/{YYYY-MM}` · `structure_trainer/results/*` — **미확인**(사람이 본다)
+- `structure_trainer/results` **Phase III 레코드에는 `correct`·`pct`·`detail` 이 없다** — 관리자 화면이 `firstCorrect`·`firstPct` 로 폴백한다 [#SFP-016-1]
 
 ## 작업
 
-**Active (≤1): 없음** · **다음 바퀴 = 관리자 화면 Phase III 가시화**(아래 Ready 첫 줄)
+**Active (≤1): 없음** · **다음 바퀴 = 38번 Phase I/II 제작**(아래 Ready)
 
 | 상태 | 항목 |
 |---|---|
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
-| Ready | 관리자 화면 Phase III 가시화 [SFP-010 1순위] · 38번 Phase I/II 제작 |
+| Ready | 38번 Phase I/II 제작 |
 | Urgent | 없음 |
 
 ## 열린 미결
@@ -62,6 +63,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | C | `_tools/anatomy/` 비공개 백업처 — gitignore는 백업이 아니다 | 대은 |
 | D | 단어 데이터 공개 범위 | 대은 |
 | E | `verify.js`를 실제 gate에 연결(pre-commit) — 지금은 실행하라는 문장뿐 | 대기 |
+| F | 관리자 화면 Phase III 표시 — **실데이터·실기기 확인** [#SFP-016-1] (jsdom 목업만 통과) | 대은 |
 
 ## 확정된 방향 — 착수 전
 
