@@ -68,6 +68,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | G | 초등 영단어 **3강 3단어 누락** — 교재 p.26 사진 없음(9/12만 입력) | 대은 |
 | H | 초등 영단어 소스 카드 문구(「초등 영단어 5-6학년」·「초등 단어책 · 강별 뜻 테스트」) — 학생 노출 문구 **승인 대기** [#SFP-017-2] | 승인 |
 | I | `state.py`가 Windows 기본 콘솔(cp949)에서 `✓` 출력 중 `UnicodeEncodeError`로 죽는다 — 지금은 `PYTHONIOENCODING=utf-8`로 우회 | 대기 |
+| J | 포털 관리자 인증 방식 점검 — 상세는 비공개 작업대장 SFP-017 | 대은 |
 | F | 관리자 화면 Phase III 표시 — **실데이터·실기기 확인** [#SFP-016-1] (jsdom 목업만 통과) | 대은 |
 
 ## 확정된 방향 — 착수 전
