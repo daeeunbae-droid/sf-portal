@@ -8,7 +8,7 @@
 
 ```state-check
 index: index.html
-voca_entry: SF_Word_Test_21.html
+voca_entry: SF_Word_Test_22.html
 structure_entry: SF-Structure-Trainer.html
 must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
@@ -34,12 +34,12 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | 무엇 | 파일 | 근거 |
 |---|---|---|
 | 포털 | `index.html` | — |
-| Voca | `SF_Word_Test_21.html` | `TOOL_URL.voca` — 검사기가 대조 [#SFP-017-1] |
+| Voca | `SF_Word_Test_22.html` | `TOOL_URL.voca` — 검사기가 대조 [#SFP-018-1] |
 | Structure | `SF-Structure-Trainer.html` | `TOOL_URL.structure` — 검사기가 대조 |
 
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
-`22` = 21 + 초등 영단어 6~10강·3강 보충(총 119단어) + 초등 영단어 「오답 다시 풀기」(이번 달 `results/{학생}` 기록 읽기 전용) — **커밋됨, 라이브·실기기 미확인, `TOOL_URL.voca` 아직 21** [#SFP-018-1]
-`20` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6].
+`22` = 21 + 초등 영단어 6~10강·3강 보충(총 119단어) + 초등 영단어 「오답 다시 풀기」(이번 달 `results/{학생}` 기록 읽기 전용) — **라이브 전환 완료**(라이브·실기기 확인) [#SFP-018-1]
+`21` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
 ## 불변식
@@ -50,7 +50,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): Voca 22 라이브 전환** — push → 라이브 22 실기기 확인 → `TOOL_URL.voca` 21→22 · 그 다음 = 38번 Phase I/II 제작
+**Active (≤1): 38번 Phase I/II 제작**
 
 | 상태 | 항목 |
 |---|---|
@@ -69,6 +69,8 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | H | 초등 영단어 소스 카드 문구(「초등 영단어 5-6학년」·「초등 단어책 · 강별 뜻 테스트」) — 학생 노출 문구 **승인 대기** [#SFP-017-2] | 승인 |
 | I | `state.py`가 Windows 기본 콘솔(cp949)에서 `✓` 출력 중 `UnicodeEncodeError`로 죽는다 — 지금은 `PYTHONIOENCODING=utf-8`로 우회 | 대기 |
 | J | 포털 관리자 인증 방식 점검 — 상세는 비공개 작업대장 SFP-017 | 대은 |
+| K | Voca 페이지 `<title>`이 20·21·22 모두 「v23」 — 카톡 미리보기에 파일 번호와 다른 버전으로 보임. 학생 노출 문구라 승인 필요 | 승인 |
+| L | 초등 영단어 오답 다시 풀기 배지 — 실제 오답 기록 있는 학생으로 숫자 확인 필요(ZZ_QA는 기록 없음, 목업만 통과) | 대은 |
 | F | 관리자 화면 Phase III 표시 — **실데이터·실기기 확인** [#SFP-016-1] (jsdom 목업만 통과) | 대은 |
 
 ## 확정된 방향 — 착수 전
