@@ -4,13 +4,13 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-15 (SFP-017 라이브 전환) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-16 (SFP-018) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
 voca_entry: SF_Word_Test_21.html
 structure_entry: SF-Structure-Trainer.html
-must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, .nojekyll, _tools/sfp012/verify.js
+must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
 stale_ignore: STATE.md, CLAUDE.md, README.md
 ```
@@ -38,6 +38,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | Structure | `SF-Structure-Trainer.html` | `TOOL_URL.structure` — 검사기가 대조 |
 
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
+`22` = 21 + 초등 영단어 6~10강·3강 보충(총 119단어) + 초등 영단어 「오답 다시 풀기」(이번 달 `results/{학생}` 기록 읽기 전용) — **커밋됨, 라이브·실기기 미확인, `TOOL_URL.voca` 아직 21** [#SFP-018-1]
 `20` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6].
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
@@ -49,7 +50,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 38번 Phase I/II 제작**
+**Active (≤1): Voca 22 라이브 전환** — push → 라이브 22 실기기 확인 → `TOOL_URL.voca` 21→22 · 그 다음 = 38번 Phase I/II 제작
 
 | 상태 | 항목 |
 |---|---|
@@ -65,7 +66,6 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | C | `_tools/anatomy/` 비공개 백업처 — gitignore는 백업이 아니다 | 대은 |
 | D | 단어 데이터 공개 범위 | 대은 |
 | E | `verify.js`를 실제 gate에 연결(pre-commit) — 지금은 실행하라는 문장뿐 | 대기 |
-| G | 초등 영단어 **3강 3단어 누락** — 교재 p.26 사진 없음(9/12만 입력) | 대은 |
 | H | 초등 영단어 소스 카드 문구(「초등 영단어 5-6학년」·「초등 단어책 · 강별 뜻 테스트」) — 학생 노출 문구 **승인 대기** [#SFP-017-2] | 승인 |
 | I | `state.py`가 Windows 기본 콘솔(cp949)에서 `✓` 출력 중 `UnicodeEncodeError`로 죽는다 — 지금은 `PYTHONIOENCODING=utf-8`로 우회 | 대기 |
 | J | 포털 관리자 인증 방식 점검 — 상세는 비공개 작업대장 SFP-017 | 대은 |
