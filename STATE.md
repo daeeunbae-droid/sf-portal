@@ -4,13 +4,13 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-20 (SFP-019 라이브 전환) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-20 (SFP-020) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
 voca_entry: SF_Word_Test_23.html
 structure_entry: SF-Structure-Trainer.html
-must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, .nojekyll, _tools/sfp012/verify.js
+must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
 stale_ignore: STATE.md, CLAUDE.md, README.md
 ```
@@ -40,6 +40,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
 `22` = 21 + 초등 영단어 6~10강·3강 보충(총 119단어) + 초등 영단어 「오답 다시 풀기」(이번 달 `results/{학생}` 기록 읽기 전용) [#SFP-018-1]
 `23` = 22 + 「단추(기본)」 소스(DAY 01~05, 200단어) + 같은 방식의 오답 다시 풀기 — **라이브 전환 완료**(라이브·실기기 확인) [#SFP-019-1]
+`24` = 23 + 단추(기본) DAY 06~30(전체 1,201항목) + 출제 수 버그 수정(미결 M) — **라이브 전환 대기** [#SFP-020-1]
 `22` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`·`21`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
@@ -51,11 +52,12 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 38번 Phase I/II 제작**
+**Active (≤1): Voca 24 라이브 전환** — push(대은) → 라이브 실기기(출제 수 포함) → `TOOL_URL.voca` 23→24 (23 = 롤백 스위치)
 
 | 상태 | 항목 |
 |---|---|
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
+| Next | 38번 Phase I/II 제작 — Active 다음 차례 |
 | Ready | `verify.js` 정답지를 20↔21로 올리기 |
 | Urgent | 없음 |
 
@@ -70,8 +72,8 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | H | 초등 영단어 소스 카드 문구(「초등 영단어 5-6학년」·「초등 단어책 · 강별 뜻 테스트」) — 학생 노출 문구 **승인 대기** [#SFP-017-2] | 승인 |
 | I | `state.py`가 Windows 기본 콘솔(cp949)에서 `✓` 출력 중 `UnicodeEncodeError`로 죽는다 — 지금은 `PYTHONIOENCODING=utf-8`로 우회 | 대기 |
 | J | 포털 관리자 인증 방식 점검 — 상세는 비공개 작업대장 SFP-017 | 대은 |
-| M | 확인하기 출제 수 부족 — `buildTestQs`·`goTestFromStudy`가 뜻이 하나인 단어가 모자라면 남은 다의어로 채우지 않아 문제가 빠진다(단추 DAY 01+02: 72→약 43, 어원편 DAY 01: 40→약 21). 19부터 있던 엔진 버그. 고치면 문항 구성 변경 = **승인 필요**, 24로 | 승인 |
 | N | STATE 구조 재검토 — 4KB 경보선 초과(약 5.6KB) | 대기 |
+| O | 같은 영단어가 두 쪽에 있으면(Voca 3000 등) 철자 문항이 1개 빠질 수 있다 — `usedSet` 영단어 기준. 작업대장 SFP-020 | 대기 |
 | F | 관리자 화면 Phase III 표시 — **실데이터·실기기 확인** [#SFP-016-1] (jsdom 목업만 통과) | 대은 |
 
 ## 확정된 방향 — 착수 전
