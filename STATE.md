@@ -4,7 +4,7 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-16 (SFP-018) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-20 (Active 변경) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
@@ -50,10 +50,11 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 38번 Phase I/II 제작**
+**Active (≤1): 새 단어교재 Voca 추가 (`SF_Word_Test_23`)**
 
 | 상태 | 항목 |
 |---|---|
+| Next | 38번 Phase I/II 제작 — Active 다음 차례(대은 2026-10-20 순서 변경) |
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
 | Ready | `verify.js` 정답지를 20↔21로 올리기 |
 | Urgent | 없음 |
