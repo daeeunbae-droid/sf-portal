@@ -4,13 +4,13 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-20 (Active 변경) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-20 (SFP-019) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
 voca_entry: SF_Word_Test_22.html
 structure_entry: SF-Structure-Trainer.html
-must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, .nojekyll, _tools/sfp012/verify.js
+must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
 stale_ignore: STATE.md, CLAUDE.md, README.md
 ```
@@ -39,6 +39,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
 `22` = 21 + 초등 영단어 6~10강·3강 보충(총 119단어) + 초등 영단어 「오답 다시 풀기」(이번 달 `results/{학생}` 기록 읽기 전용) — **라이브 전환 완료**(라이브·실기기 확인) [#SFP-018-1]
+`23` = 22 + 「단추(기본)」 소스(DAY 01~05, 200단어) + 같은 방식의 오답 다시 풀기 — **라이브 전환 대기** [#SFP-019-1]
 `21` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
@@ -50,7 +51,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 새 단어교재 Voca 추가 (`SF_Word_Test_23`)**
+**Active (≤1): Voca 23 라이브 전환** — push(대은) → 라이브 실기기 → `TOOL_URL.voca` 22→23 (22 = 롤백 스위치)
 
 | 상태 | 항목 |
 |---|---|
