@@ -4,13 +4,13 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-23 (SFP-024 라이브 전환) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-23 (SFP-025) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
 voca_entry: SF_Word_Test_28.html
 structure_entry: SF-Structure-Trainer.html
-must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, .nojekyll, _tools/sfp012/verify.js
+must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
 stale_ignore: STATE.md, CLAUDE.md, README.md
 ```
@@ -45,6 +45,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `26` = 25 + 초등 영단어 15·18~22강(총 239단어, 16·17강 사진 대기) (작업대장 SFP-022)
 `27` = 26 + 책 오답 다시 풀기 시험 목록(시험별 선택·최근 30일) [#SFP-023-1]
 `28` = 27 + 어원편 오답 다시 풀기(같은 시험 목록) — **라이브 전환 완료**(라이브·실기기 확인) [#SFP-024-1]
+`29` = 28 + 책 오답 다시 풀기 = 지난 시험 + 이번 달 단원별 묶음(초등·단추·어원편) — **라이브 전환 대기** [#SFP-025-1]
 `27` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`26`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
@@ -56,12 +57,13 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 38번 Phase I/II 제작**
+**Active (≤1): Voca 29 라이브 전환** — push(대은) → 라이브 실기기 → `TOOL_URL.voca` 28→29 (28 = 롤백 스위치)
 
 | 상태 | 항목 |
 |---|---|
-| Ready | Voca 3000 오답 날짜별 줄 덧붙이기(2단계) — 같은 날 여러 기록 처리 결정 먼저 [#SFP-024-2] · 승인 |
+| Ready | Voca 3000 오답 다시 풀기를 같은 화면(지난 시험 + 쪽별 월 묶음)으로 — 30 [#SFP-025-3] |
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
+| Next | 38번 Phase I/II 제작 — Active 다음 차례 |
 | Ready | `verify.js` 정답지를 20↔21로 올리기 |
 | Urgent | 없음 |
 
@@ -78,7 +80,6 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | J | 포털 관리자 인증 방식 점검 — 상세는 비공개 작업대장 SFP-017 | 대은 |
 | N | STATE 구조 재검토 — 4KB 경보선 초과(약 5.6KB) | 대기 |
 | O | 같은 영단어가 두 쪽에 있으면(Voca 3000 등) 철자 문항이 1개 빠질 수 있다 — `usedSet` 영단어 기준. 작업대장 SFP-020 | 대기 |
-| P | 책 오답 시험 목록에 같은 날 같은 범위가 여러 줄로 나온다(실데이터: 어원편 같은 날 DAY 11 × 2줄) — 재시험마다 기록 1건. 처리 방식 결정 필요 [#SFP-024-2] | 승인 |
 | F | 관리자 화면 Phase III 표시 — **실데이터·실기기 확인** [#SFP-016-1] (jsdom 목업만 통과) | 대은 |
 
 ## 확정된 방향 — 착수 전
