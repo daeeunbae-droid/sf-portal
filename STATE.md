@@ -4,13 +4,13 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-23 (SFP-025 라이브 전환) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-23 (SFP-026) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
 voca_entry: SF_Word_Test_29.html
 structure_entry: SF-Structure-Trainer.html
-must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, .nojekyll, _tools/sfp012/verify.js
+must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, SF_Word_Test_30.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
 stale_ignore: STATE.md, CLAUDE.md, README.md
 ```
@@ -46,6 +46,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `27` = 26 + 책 오답 다시 풀기 시험 목록(시험별 선택·최근 30일) [#SFP-023-1]
 `28` = 27 + 어원편 오답 다시 풀기(같은 시험 목록) [#SFP-024-1]
 `29` = 28 + 책 오답 다시 풀기 = 지난 시험 + 이번 달 단원별 묶음(초등·단추·어원편) — **라이브 전환 완료**(라이브·실기기 확인) [#SFP-025-1]
+`30` = 29 + Voca 3000 오답 다시 풀기도 같은 화면(묶음 = 전용 칸 쪽별) — **라이브 전환 대기** [#SFP-026-1]
 `28` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`27`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
@@ -57,11 +58,11 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 38번 Phase I/II 제작**
+**Active (≤1): Voca 30 라이브 전환** — push(대은) → 라이브 실기기 → `TOOL_URL.voca` 29→30 (29 = 롤백 스위치)
 
 | 상태 | 항목 |
 |---|---|
-| Ready | Voca 3000 오답 다시 풀기를 같은 화면(지난 시험 + 쪽별 월 묶음)으로 — 30 [#SFP-025-3] |
+| Next | 38번 Phase I/II 제작 — Active 다음 차례 |
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
 | Ready | `verify.js` 정답지를 20↔21로 올리기 |
 | Urgent | 없음 |
