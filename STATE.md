@@ -8,7 +8,7 @@
 
 ```state-check
 index: index.html
-voca_entry: SF_Word_Test_30.html
+voca_entry: SF_Word_Test_31.html
 structure_entry: SF-Structure-Trainer.html
 must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, SF_Word_Test_30.html, SF_Word_Test_31.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
@@ -24,7 +24,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 |---|---|---|
 | 코드 | `git log` · `state.py` | 검사됨 |
 | 원격 | `python3 _tools/state/state.py --fetch` | **검사기 출력 참조** — 최초 동기화 2026-08-29 |
-| 배포(Pages) | 라이브 URL 실제 접속 | 2026-10-23 확인 — `SF_Word_Test_30.html` 200 · Voca 3000 오답 다시 풀기도 같은 화면 · 실기기 OK(대은) |
+| 배포(Pages) | 라이브 URL 실제 접속 | 2026-10-25 확인 — `SF_Word_Test_31.html` 200 · 초등 영단어 16강 11개 · 실기기 OK(대은) |
 | Firebase | 실기기만. `verify.js`는 `memStore`로 떼고 돌림 | **미확인** |
 
 「git이 사실」은 **코드에 한해서**다.
@@ -34,7 +34,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | 무엇 | 파일 | 근거 |
 |---|---|---|
 | 포털 | `index.html` | — |
-| Voca | `SF_Word_Test_30.html` | `TOOL_URL.voca` — 검사기가 대조 [#SFP-026-1] |
+| Voca | `SF_Word_Test_31.html` | `TOOL_URL.voca` — 검사기가 대조 (작업대장 SFP-027) |
 | Structure | `SF-Structure-Trainer.html` | `TOOL_URL.structure` — 검사기가 대조 |
 
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
@@ -46,9 +46,9 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `27` = 26 + 책 오답 다시 풀기 시험 목록(시험별 선택·최근 30일) [#SFP-023-1]
 `28` = 27 + 어원편 오답 다시 풀기(같은 시험 목록) [#SFP-024-1]
 `29` = 28 + 책 오답 다시 풀기 = 지난 시험 + 이번 달 단원별 묶음(초등·단추·어원편) [#SFP-025-1]
-`30` = 29 + Voca 3000 오답 다시 풀기도 같은 화면(묶음 = 전용 칸 쪽별) — **라이브 전환 완료**(라이브·실기기 확인) [#SFP-026-1]
-`31` = 30 + 초등 영단어 16강(총 250단어, 17강 사진 대기) — **라이브 전환 대기** (작업대장 SFP-027)
-`29` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`28`도 지우지 않는다.
+`30` = 29 + Voca 3000 오답 다시 풀기도 같은 화면(묶음 = 전용 칸 쪽별) [#SFP-026-1]
+`31` = 30 + 초등 영단어 16강(총 250단어, 17강 사진 대기) — **라이브 전환 완료**(라이브·실기기 확인) (작업대장 SFP-027)
+`30` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`29`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
 ## 불변식
@@ -59,11 +59,10 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): Voca 31 라이브 전환** — push(대은) → 라이브 실기기 → `TOOL_URL.voca` 30→31 (30 = 롤백 스위치)
+**Active (≤1): 38번 Phase I/II 제작**
 
 | 상태 | 항목 |
 |---|---|
-| Next | 38번 Phase I/II 제작 — Active 다음 차례 |
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
 | Ready | `verify.js` 정답지를 20↔21로 올리기 |
 | Urgent | 없음 |
