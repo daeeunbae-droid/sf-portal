@@ -4,11 +4,11 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-10-27 (SFP-028) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-10-28 (SFP-028 라이브 전환) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
-voca_entry: SF_Word_Test_31.html
+voca_entry: SF_Word_Test_32.html
 structure_entry: SF-Structure-Trainer.html
 must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, SF_Word_Test_30.html, SF_Word_Test_31.html, SF_Word_Test_32.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
@@ -24,7 +24,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 |---|---|---|
 | 코드 | `git log` · `state.py` | 검사됨 |
 | 원격 | `python3 _tools/state/state.py --fetch` | **검사기 출력 참조** — 최초 동기화 2026-08-29 |
-| 배포(Pages) | 라이브 URL 실제 접속 | 2026-10-25 확인 — `SF_Word_Test_31.html` 200 · 초등 영단어 16강 11개 · 실기기 OK(대은) |
+| 배포(Pages) | 라이브 URL 실제 접속 | 2026-10-28 확인 — `SF_Word_Test_32.html` 200 · 9월 18지문 · 실기기 OK(대은) |
 | Firebase | 실기기만. `verify.js`는 `memStore`로 떼고 돌림 | **미확인** |
 
 「git이 사실」은 **코드에 한해서**다.
@@ -34,7 +34,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | 무엇 | 파일 | 근거 |
 |---|---|---|
 | 포털 | `index.html` | — |
-| Voca | `SF_Word_Test_31.html` | `TOOL_URL.voca` — 검사기가 대조 (작업대장 SFP-027) |
+| Voca | `SF_Word_Test_32.html` | `TOOL_URL.voca` — 검사기가 대조 (작업대장 SFP-028) |
 | Structure | `SF-Structure-Trainer.html` | `TOOL_URL.structure` — 검사기가 대조 |
 
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
@@ -47,9 +47,9 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `28` = 27 + 어원편 오답 다시 풀기(같은 시험 목록) [#SFP-024-1]
 `29` = 28 + 책 오답 다시 풀기 = 지난 시험 + 이번 달 단원별 묶음(초등·단추·어원편) [#SFP-025-1]
 `30` = 29 + Voca 3000 오답 다시 풀기도 같은 화면(묶음 = 전용 칸 쪽별) [#SFP-026-1]
-`31` = 30 + 초등 영단어 16강(총 250단어, 17강 사진 대기) — 라이브 정본 (작업대장 SFP-027)
-`32` = 31 + 모의고사 단어 26년 9월 18지문 216단어(`269_*`) + 문제 화면 회차 표시를 고른 지문으로 [#SFP-028-1~3] — **라이브 전환 전**(실기기 대기)
-`31` = 현 정본이자 32 전환 뒤 **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`30`도 지우지 않는다.
+`31` = 30 + 초등 영단어 16강(총 250단어, 17강 사진 대기) (작업대장 SFP-027)
+`32` = 31 + 모의고사 단어 26년 9월 18지문 216단어(`269_*`) + 문제 화면 회차 표시를 고른 지문으로 [#SFP-028-1~3] — **라이브 전환 완료**(라이브·실기기 확인)
+`31` = 직전 정본, **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`30`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
 ## 불변식
@@ -60,12 +60,11 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): Voca 9월 모의고사 추가 — 32 push → 실기기 확인 → `TOOL_URL.voca` 31→32** [#SFP-028-3]
+**Active (≤1): 38번 Phase I/II 제작**
 
 | 상태 | 항목 |
 |---|---|
 | Blocked | Voca 오답풀 책별 분리 — `v3Path()`에 `bookKey` 분기. **Firebase 스키마 = 승인 대기** [#SFP-012-4] |
-| Ready | 38번 Phase I/II 제작 (Active에서 내려옴) |
 | Ready | `verify.js` 정답지를 20↔21로 올리기 |
 | Urgent | 없음 |
 
@@ -84,6 +83,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | O | 같은 영단어가 두 쪽에 있으면(Voca 3000 등) 철자 문항이 1개 빠질 수 있다 — `usedSet` 영단어 기준. 작업대장 SFP-020 | 대기 |
 | Q | 문장형 확인하기 진입 직후 「나가기」 없이 떠나면(탭 닫기) progress에 `done:false`만 남아 재진입 시 오류 — 31부터 있던 동작. 작업대장 SFP-028 | 대기 |
 | R | 3월 데이터 문장 일부가 문제지 그대로(29 어법 오답형 등) — 9월은 정답·고친 문장으로 넣음 [#SFP-028-2]. 3월 재검토 | 대은 |
+| S | Voca를 포털 밖에서 직접 열면 「← 로그아웃」이 없는 `sf-portal.html`로 가서 404 — 31부터 있던 동작(포털 iframe 안에서는 안 탐). 작업대장 SFP-028 | 대기 |
 | F | 관리자 화면 Phase III 표시 — **실데이터·실기기 확인** [#SFP-016-1] (jsdom 목업만 통과) | 대은 |
 
 ## 확정된 방향 — 착수 전
