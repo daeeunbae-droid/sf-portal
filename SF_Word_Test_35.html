@@ -675,7 +675,7 @@ function leaveVoca(){
         return;
       }
     }catch(e){}
-    location.href='sf-portal.html'; return;   // 멀티페이지(직접 접속) 폴백
+    location.href='index.html'; return;   // 멀티페이지(직접 접속) 폴백 — [SFP-031] 포털 = index.html (sf-portal.html은 없는 파일 → 404, 미결 S)
   }
   S.sc='login';R();
 }
