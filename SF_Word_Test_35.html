@@ -958,7 +958,13 @@ function goTestFromStudy(){
   }
   meanPool=sh(meanPool);
   const usedSet=new Set(meanPool.map(w=>w[0]));
-  const spPool=sh(all.filter(w=>!usedSet.has(w[0]))).slice(0,spCount);
+  let spPool=sh(all.filter(w=>!usedSet.has(w[0]))).slice(0,spCount);
+  // [SFP-031] 같은 영단어가 두 쪽에 있으면(Voca 3000 p1·p2 등) 위 필터가 남은 한쪽까지 빼서 철자 문항이 모자랐다(미결 O).
+  // 모자라면 뜻쓰기에 안 쓰인 항목으로 채운다 — 문항 수 = 선택 수가 우선.
+  if(spPool.length<spCount){
+    const inMean=new Set(meanPool),inSp=new Set(spPool);
+    spPool=spPool.concat(sh(all.filter(w=>!inMean.has(w)&&!inSp.has(w))).slice(0,spCount-spPool.length));
+  }
   S.qs=sh([
     ...spPool.map((w,i)=>({en:w[0],ko:w[1],tp:'spell',id:i})),
     ...meanPool.map((w,i)=>({en:w[0],ko:w[1],tp:'mean',id:spPool.length+i}))
@@ -997,7 +1003,13 @@ function buildTestQs(){
   meanPool=sh(meanPool);
   // 스펠링: 나머지에서 배정
   const usedSet=new Set(meanPool.map(w=>w[0]));
-  const spPool=sh(all.filter(w=>!usedSet.has(w[0]))).slice(0,spCount);
+  let spPool=sh(all.filter(w=>!usedSet.has(w[0]))).slice(0,spCount);
+  // [SFP-031] 같은 영단어가 두 쪽에 있으면(Voca 3000 p1·p2 등) 위 필터가 남은 한쪽까지 빼서 철자 문항이 모자랐다(미결 O).
+  // 모자라면 뜻쓰기에 안 쓰인 항목으로 채운다 — 문항 수 = 선택 수가 우선.
+  if(spPool.length<spCount){
+    const inMean=new Set(meanPool),inSp=new Set(spPool);
+    spPool=spPool.concat(sh(all.filter(w=>!inMean.has(w)&&!inSp.has(w))).slice(0,spCount-spPool.length));
+  }
   // 최종 문항 합치기 (섞기)
   return sh([
     ...spPool.map((w,i)=>({en:w[0],ko:w[1],tp:'spell',id:i})),
