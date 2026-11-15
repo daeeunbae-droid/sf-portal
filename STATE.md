@@ -4,13 +4,13 @@
 > **덮어쓴다** — 이유는 결정로그, 사건은 작업대장. **4KB는 경보선**(넘으면 사실을 빼지 말고 구조를 다시 본다).
 > **공개 저장소다** — 민감 항목은 제목만, 상세는 비공개 문서.
 
-**갱신** 2026-11-14 (SFP-039) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
+**갱신** 2026-11-16 (SFP-040) · **기준선** 2026-08-26 실물 대조 = `검증됨` (단 Firebase는 미확인)
 
 ```state-check
 index: index.html
 voca_entry: SF_Word_Test_42.html
 structure_entry: SF-Structure-Trainer.html
-must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, SF_Word_Test_30.html, SF_Word_Test_31.html, SF_Word_Test_32.html, SF_Word_Test_33.html, SF_Word_Test_34.html, SF_Word_Test_35.html, SF_Word_Test_36.html, SF_Word_Test_37.html, SF_Word_Test_38.html, SF_Word_Test_39.html, SF_Word_Test_40.html, SF_Word_Test_41.html, SF_Word_Test_42.html, .nojekyll, _tools/sfp012/verify.js
+must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, SF_Word_Test_30.html, SF_Word_Test_31.html, SF_Word_Test_32.html, SF_Word_Test_33.html, SF_Word_Test_34.html, SF_Word_Test_35.html, SF_Word_Test_36.html, SF_Word_Test_37.html, SF_Word_Test_38.html, SF_Word_Test_39.html, SF_Word_Test_40.html, SF_Word_Test_41.html, SF_Word_Test_42.html, SF_Word_Test_43.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
 stale_ignore: STATE.md, CLAUDE.md, README.md
 ```
@@ -58,8 +58,9 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `39` = 38 + 초등 영단어 26강 완성(총 428단어, 1~36강 전부) (작업대장 SFP-036) — 단독 전환 안 함(40에 포함)
 `40` = 39 + 익히기 보기에서 뜻 겹치는 단어 제외(미결 U) (작업대장 SFP-037)
 `41` = 40 + 모의고사 단어 오답 다시 풀기 = 뜻 쓰기 [#SFP-038-1]
-`42` = 41 + 초등 28강에서 split·metro·bay 제외(28강 쪽 아님, 총 425) (작업대장 SFP-039) — **라이브 전환 완료**(라이브·실기기 확인) — 라이브 정본
-`41` = **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`40`도 지우지 않는다.
+`42` = 41 + 초등 28강에서 split·metro·bay 제외(28강 쪽 아님, 총 425) (작업대장 SFP-039) — 라이브 정본
+`43` = 42 + 소스 「중등부 교과단어」(학년 → 교과서) · 중2 동아(이병민) 7과 71단어 [#SFP-040-1~3] — **라이브 전환 전**(실기기 대기)
+`42` = 현 정본이자 43 전환 뒤 **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`41`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
 ## 불변식
@@ -70,7 +71,8 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): 없음 — 다음 = SF Structure 작업(대은 착수 지시 대기) [#SFP-033-1]**
+**Active (≤1): Voca 43(중등부 교과단어) — push → 실기기 확인 → `TOOL_URL.voca` 42→43** (작업대장 SFP-040)
+그다음 = SF Structure 작업(대은 착수 지시 대기) [#SFP-033-1]
 
 | 상태 | 항목 |
 |---|---|
