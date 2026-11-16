@@ -8,7 +8,7 @@
 
 ```state-check
 index: index.html
-voca_entry: SF_Word_Test_43.html
+voca_entry: SF_Word_Test_44.html
 structure_entry: SF-Structure-Trainer.html
 must_exist: SF_Word_Test_19.html, SF_Word_Test_20.html, SF_Word_Test_21.html, SF_Word_Test_22.html, SF_Word_Test_23.html, SF_Word_Test_24.html, SF_Word_Test_25.html, SF_Word_Test_26.html, SF_Word_Test_27.html, SF_Word_Test_28.html, SF_Word_Test_29.html, SF_Word_Test_30.html, SF_Word_Test_31.html, SF_Word_Test_32.html, SF_Word_Test_33.html, SF_Word_Test_34.html, SF_Word_Test_35.html, SF_Word_Test_36.html, SF_Word_Test_37.html, SF_Word_Test_38.html, SF_Word_Test_39.html, SF_Word_Test_40.html, SF_Word_Test_41.html, SF_Word_Test_42.html, SF_Word_Test_43.html, SF_Word_Test_44.html, .nojekyll, _tools/sfp012/verify.js
 wb_md5.Voca 3000: 919d8cdd01fd32a440c9a07f028f8278
@@ -24,7 +24,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 |---|---|---|
 | 코드 | `git log` · `state.py` | 검사됨 |
 | 원격 | `python3 _tools/state/state.py --fetch` | **검사기 출력 참조** — 최초 동기화 2026-08-29 |
-| 배포(Pages) | 라이브 URL 실제 접속 | 2026-11-16 확인 — `SF_Word_Test_43.html` 200 · md5 로컬·HEAD 일치 · 실기기 OK(대은) |
+| 배포(Pages) | 라이브 URL 실제 접속 | 2026-11-16 확인 — `SF_Word_Test_44.html` 200 · md5 로컬·HEAD 일치 · 실기기 OK(대은) |
 | Firebase | 실기기만. `verify.js`는 `memStore`로 떼고 돌림 | **미확인** |
 
 「git이 사실」은 **코드에 한해서**다.
@@ -34,7 +34,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 | 무엇 | 파일 | 근거 |
 |---|---|---|
 | 포털 | `index.html` | — |
-| Voca | `SF_Word_Test_43.html` | `TOOL_URL.voca` — 검사기가 대조 (작업대장 SFP-034~040) |
+| Voca | `SF_Word_Test_44.html` | `TOOL_URL.voca` — 검사기가 대조 (작업대장 SFP-034~041) |
 | Structure | `SF-Structure-Trainer.html` | `TOOL_URL.structure` — 검사기가 대조 |
 
 `21` = 20 + 「초등 영단어 5-6학년」 소스(1~5강). `verify.js`는 여전히 19↔20 대조(21로 돌리면 책 수 관련 4건만 FAIL — 예상값).
@@ -59,9 +59,9 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 `40` = 39 + 익히기 보기에서 뜻 겹치는 단어 제외(미결 U) (작업대장 SFP-037)
 `41` = 40 + 모의고사 단어 오답 다시 풀기 = 뜻 쓰기 [#SFP-038-1]
 `42` = 41 + 초등 28강에서 split·metro·bay 제외(28강 쪽 아님, 총 425) (작업대장 SFP-039)
-`43` = 42 + 소스 「중등부 교과단어」(학년 → 교과서) · 중2 동아(이병민) 7과 71단어 [#SFP-040-1~3] — 라이브 정본
-`44` = 43 + 소스 「리딩튜터」(단어·뜻, 지문 문장 없음) Section 01-1~01-4·02-1 70단어 [#SFP-041-1~3] — **라이브 전환 전**(실기기 대기)
-`43` = 현 정본이자 44 전환 뒤 **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`42`도 지우지 않는다.
+`43` = 42 + 소스 「중등부 교과단어」(학년 → 교과서) · 중2 동아(이병민) 7과 71단어 [#SFP-040-1~3]
+`44` = 43 + 소스 「리딩튜터」(단어·뜻, 지문 문장 없음) Section 01-1~01-4·02-1 70단어 [#SFP-041-1~3] — 라이브 정본 · 라이브 전환 완료(라이브·실기기 확인)
+`43` = **롤백 스위치**(`TOOL_URL.voca` 한 줄) — 지우지 않는다 [#SFP-012-6]. `20`~`42`도 지우지 않는다.
 `15_2 / 16 / 17 / 19` = 무참조 구버전. **19는 지우지 않는다**(`verify.js`의 정답지). `18`은 결번.
 
 ## 불변식
@@ -72,8 +72,7 @@ stale_ignore: STATE.md, CLAUDE.md, README.md
 
 ## 작업
 
-**Active (≤1): Voca 44(리딩튜터) — push → 실기기 확인 → `TOOL_URL.voca` 43→44** (작업대장 SFP-041)
-그다음 = SF Structure 작업(대은 착수 지시 대기) [#SFP-033-1]
+**Active (≤1): 없음 — 다음 = SF Structure 작업(대은 착수 지시 대기) [#SFP-033-1]**
 
 | 상태 | 항목 |
 |---|---|
